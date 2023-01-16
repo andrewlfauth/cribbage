@@ -6,7 +6,7 @@ import StartButton from './StartButton.vue'
 
 <template>
   <div
-    class="flex flex-col items-center justify-center h-full py-20 mx-auto md:justify-start lg:justify-between md:py-32 lg:py-20"
+    class="flex flex-col items-center h-full py-20 mx-auto lg:justify-between md:py-32 lg:py-20"
   >
     <ColorSettings />
     <div class="hidden lg:block">
