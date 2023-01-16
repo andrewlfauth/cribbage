@@ -8,7 +8,7 @@ const { changeCard, theme } = useThemeStore()
 
 <template>
   <span class="block text-center text-gray-400 mt-14 lg:mt-0"
-    >Choose Card:</span
+    >Choose cards:</span
   >
   <div class="flex -mt-5 -space-x-8 md:-space-x-4 lg:-mt-28">
     <div class="flex flex-col items-center">
