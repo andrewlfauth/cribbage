@@ -1,5 +1,6 @@
 <script setup>
-import ThemeSettings from './ThemeSettings.vue'
+import CardSettings from './CardSettings.vue'
+import ColorSettings from './ColorSettings.vue'
 import StartButton from './StartButton.vue'
 </script>
 
@@ -8,8 +9,11 @@ import StartButton from './StartButton.vue'
     class="absolute left-0 right-0 flex flex-col items-center mx-auto -translate-y-1/2 top-1/2 w-fit"
   >
     <div class="absolute -top-52">
-      <ThemeSettings />
+      <ColorSettings />
     </div>
     <StartButton />
+    <div class="absolute top-44">
+      <CardSettings />
+    </div>
   </div>
 </template>

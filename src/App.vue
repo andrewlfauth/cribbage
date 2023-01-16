@@ -1,4 +1,5 @@
 <script setup>
+import Card from './components/Card.vue'
 import StartView from './components/StartView/StartView.vue'
 import { useGameStore } from './stores/game'
 

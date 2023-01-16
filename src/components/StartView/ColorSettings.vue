@@ -1,17 +1,17 @@
 <script setup>
-import { useGameStore } from '../../stores/game'
+import { useThemeStore } from '../../stores/theme'
 
-const { game, changeTheme } = useGameStore()
+const { theme, changeTheme } = useThemeStore()
 </script>
 
 <template>
   <div>
-    <span class="text-gray-400 mb-6 block text-center">Choose colors:</span>
+    <span class="block mb-6 text-center text-gray-400">Choose colors:</span>
     <div class="flex space-x-10">
       <div>
         <button
-          :class="{ 'bg-white bg-opacity-10': game.theme == 'classic' }"
-          class="flex space-x-2 p-2 rounded-md hover:bg-white hover:bg-opacity-10 duration-150"
+          :class="{ 'bg-white bg-opacity-10': theme.color == 'classic' }"
+          class="flex p-2 space-x-2 duration-150 rounded-md hover:bg-white hover:bg-opacity-10"
           @click="changeTheme('classic')"
         >
           <div
@@ -21,14 +21,14 @@ const { game, changeTheme } = useGameStore()
             class="w-10 h-10 bg-blue-400 border-4 border-gray-800 rounded"
           ></div>
         </button>
-        <span class="text-center text-gray-400 text-sm block mt-2 duration-100"
+        <span class="block mt-2 text-sm text-center text-gray-400 duration-100"
           >Classic</span
         >
       </div>
       <div>
         <button
-          :class="{ 'bg-white bg-opacity-10': game.theme == 'current' }"
-          class="flex space-x-2 p-2 rounded-md hover:bg-white hover:bg-opacity-10 duration-150"
+          :class="{ 'bg-white bg-opacity-10': theme.color == 'current' }"
+          class="flex p-2 space-x-2 duration-150 rounded-md hover:bg-white hover:bg-opacity-10"
           @click="changeTheme('current')"
         >
           <div
@@ -38,14 +38,14 @@ const { game, changeTheme } = useGameStore()
             class="w-10 h-10 bg-purple-400 border-4 border-gray-800 rounded"
           ></div>
         </button>
-        <span class="text-center text-gray-400 text-sm block mt-2"
+        <span class="block mt-2 text-sm text-center text-gray-400"
           >Current</span
         >
       </div>
       <div>
         <button
-          :class="{ 'bg-white bg-opacity-10': game.theme == 'domino' }"
-          class="flex space-x-2 p-2 rounded-md hover:bg-white hover:bg-opacity-10 duration-150"
+          :class="{ 'bg-white bg-opacity-10': theme.color == 'domino' }"
+          class="flex p-2 space-x-2 duration-150 rounded-md hover:bg-white hover:bg-opacity-10"
           @click="changeTheme('domino')"
         >
           <div
@@ -55,7 +55,7 @@ const { game, changeTheme } = useGameStore()
             class="w-10 h-10 bg-black border-4 border-gray-800 rounded"
           ></div>
         </button>
-        <span class="text-center text-gray-400 text-sm block mt-2">Domino</span>
+        <span class="block mt-2 text-sm text-center text-gray-400">Domino</span>
       </div>
     </div>
   </div>
