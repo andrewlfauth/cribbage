@@ -15,3 +15,11 @@ export const VALUES = [
   { value: 'Q', order: 12, count: 10 },
   { value: 'K', order: 13, count: 10 },
 ]
+
+export const cardBacks = {
+  default:
+    'https://res.cloudinary.com/dpnkrz8c8/image/upload/v1673850639/cribbage/brdtomirmaqh8mextlol.png',
+  fish: 'https://res.cloudinary.com/dpnkrz8c8/image/upload/v1673849811/cribbage/fjrijn26zuhbn0v3or2j.avif',
+  paint:
+    'https://res.cloudinary.com/dpnkrz8c8/image/upload/v1673849518/cribbage/aaypyrg4xmb2cttdblmi.avif',
+}

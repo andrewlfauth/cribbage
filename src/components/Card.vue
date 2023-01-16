@@ -1,18 +1,18 @@
 <script setup>
+import { useThemeStore } from '../stores/theme'
+
 const props = defineProps({
   bg: String,
-  showBack: {
-    type: Boolean,
-    default: false,
-  },
+  showBack: Boolean,
   class: String,
 })
+
+const { theme } = useThemeStore()
 
 const emit = defineEmits(['clicked'])
 
 const customBack = `background-image: url('${props.bg}');`
-const defaultBack =
-  "background-image: url('https://res.cloudinary.com/dpnkrz8c8/image/upload/v1673850639/cribbage/brdtomirmaqh8mextlol.png');"
+const themeBack = `background-image: url('${theme.card}');`
 </script>
 
 <template>
@@ -24,7 +24,7 @@ const defaultBack =
   >
     <div class="w-full h-full border-2 border-gray-400 rounded-md border-3">
       <div
-        :style="props.bg ? customBack : defaultBack"
+        :style="props.bg ? customBack : themeBack"
         class="w-full h-full bg-white bg-center bg-cover rounded-md"
       ></div>
     </div>

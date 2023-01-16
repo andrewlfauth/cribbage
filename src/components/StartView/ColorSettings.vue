@@ -1,7 +1,7 @@
 <script setup>
 import { useThemeStore } from '../../stores/theme'
 
-const { theme, changeTheme } = useThemeStore()
+const { theme, changeColor } = useThemeStore()
 </script>
 
 <template>
@@ -12,7 +12,7 @@ const { theme, changeTheme } = useThemeStore()
         <button
           :class="{ 'bg-white bg-opacity-10': theme.color == 'classic' }"
           class="flex p-2 space-x-2 duration-150 rounded-md hover:bg-white hover:bg-opacity-10"
-          @click="changeTheme('classic')"
+          @click="changeColor('classic')"
         >
           <div
             class="w-10 h-10 bg-red-400 border-4 border-gray-800 rounded"
@@ -29,7 +29,7 @@ const { theme, changeTheme } = useThemeStore()
         <button
           :class="{ 'bg-white bg-opacity-10': theme.color == 'current' }"
           class="flex p-2 space-x-2 duration-150 rounded-md hover:bg-white hover:bg-opacity-10"
-          @click="changeTheme('current')"
+          @click="changeColor('current')"
         >
           <div
             class="w-10 h-10 bg-green-400 border-4 border-gray-800 rounded"
@@ -46,7 +46,7 @@ const { theme, changeTheme } = useThemeStore()
         <button
           :class="{ 'bg-white bg-opacity-10': theme.color == 'domino' }"
           class="flex p-2 space-x-2 duration-150 rounded-md hover:bg-white hover:bg-opacity-10"
-          @click="changeTheme('domino')"
+          @click="changeColor('domino')"
         >
           <div
             class="w-10 h-10 bg-gray-100 border-4 border-gray-800 rounded"

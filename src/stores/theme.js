@@ -1,13 +1,14 @@
 import { reactive } from 'vue'
 import { defineStore } from 'pinia'
+import { cardBacks } from '../data/cards'
 
 export const useThemeStore = defineStore('theme', () => {
   const theme = reactive({
     color: 'classic',
-    card: 'https://res.cloudinary.com/dpnkrz8c8/image/upload/v1673850639/cribbage/brdtomirmaqh8mextlol.png',
+    card: cardBacks.default,
   })
 
-  const changeTheme = (newTheme) => {
+  const changeColor = (newTheme) => {
     const app = document.querySelector('html')
     const oldTheme = theme.color
     app.classList.remove('t-' + oldTheme)
@@ -15,5 +16,7 @@ export const useThemeStore = defineStore('theme', () => {
     theme.color = newTheme
   }
 
-  return { theme, changeTheme }
+  const changeCard = (newCard) => (theme.card = newCard)
+
+  return { theme, changeColor, changeCard }
 })

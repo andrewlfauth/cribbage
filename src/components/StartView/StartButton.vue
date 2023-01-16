@@ -25,6 +25,6 @@ onUnmounted(() => clearInterval(intervalId))
     @click="changeStage('cut')"
     class="px-4 py-2 text-4xl font-medium text-white duration-150 border-4 border-gray-800 rounded-md w-fit hover:ring-2 hover:ring-offset-2 ring-gray-300 ring-offset-gray-900 active:ring-offset-0"
   >
-    Start
+    Start Game
   </button>
 </template>

@@ -5,15 +5,9 @@ import StartButton from './StartButton.vue'
 </script>
 
 <template>
-  <div
-    class="absolute left-0 right-0 flex flex-col items-center mx-auto -translate-y-1/2 top-1/2 w-fit"
-  >
-    <div class="absolute -top-52">
-      <ColorSettings />
-    </div>
+  <div class="flex flex-col items-center justify-between h-full py-20 mx-auto">
+    <ColorSettings />
     <StartButton />
-    <div class="absolute top-44">
-      <CardSettings />
-    </div>
+    <CardSettings />
   </div>
 </template>
