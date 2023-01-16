@@ -7,7 +7,7 @@ const { theme, changeColor } = useThemeStore()
 <template>
   <div>
     <span class="block mb-6 text-center text-gray-400">Choose colors:</span>
-    <div class="flex space-x-10">
+    <div class="flex space-x-4 md:space-x-10">
       <div>
         <button
           :class="{ 'bg-white bg-opacity-10': theme.color == 'classic' }"

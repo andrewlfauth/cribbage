@@ -7,8 +7,10 @@ const { changeCard, theme } = useThemeStore()
 </script>
 
 <template>
-  <span class="block text-center text-gray-400">Choose Card:</span>
-  <div class="flex -space-x-4 -mt-28">
+  <span class="block text-center text-gray-400 mt-14 lg:mt-0"
+    >Choose Card:</span
+  >
+  <div class="flex -mt-5 -space-x-8 md:-space-x-4 lg:-mt-28">
     <div class="flex flex-col items-center">
       <button
         :class="{ 'bg-white bg-opacity-10': theme.card == cardBacks.default }"
