@@ -1,7 +1,8 @@
 import { reactive } from 'vue'
 import { SUITS, VALUES } from '../data/cards'
+import { defineStore } from 'pinia'
 
-export const useGameStore = () => {
+export const useGameStore = defineStore('game', () => {
   const game = reactive({
     theme: 'classic',
     stage: '',
@@ -16,8 +17,10 @@ export const useGameStore = () => {
     game.theme = newTheme
   }
 
-  return { game, changeTheme }
-}
+  const changeStage = (stage) => (game.stage = stage)
+
+  return { game, changeTheme, changeStage }
+})
 
 function newDeck() {
   return SUITS.flatMap((suit) => VALUES.map((values) => ({ suit, ...values })))

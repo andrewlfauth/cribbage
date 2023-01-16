@@ -5,7 +5,7 @@ import StartButton from './StartButton.vue'
 
 <template>
   <div
-    class="absolute top-1/2 -translate-y-1/2 mx-auto right-0 left-0 w-fit flex flex-col items-center"
+    class="absolute left-0 right-0 flex flex-col items-center mx-auto -translate-y-1/2 top-1/2 w-fit"
   >
     <div class="absolute -top-52">
       <ThemeSettings />
