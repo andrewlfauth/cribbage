@@ -2,6 +2,9 @@
 import Button from '../Button.vue'
 import CardSettings from './CardSettings.vue'
 import ColorSettings from './ColorSettings.vue'
+import { useGameStore } from '../../stores/game'
+
+const { changeStage } = useGameStore()
 </script>
 
 <template>
@@ -10,7 +13,11 @@ import ColorSettings from './ColorSettings.vue'
   >
     <ColorSettings />
     <div class="hidden lg:block">
-      <Button text="Start Game" :class="'text-4xl ring-gray-200'" />
+      <Button
+        @click="changeStage('cut')"
+        text="Start Game"
+        :class="'text-4xl ring-gray-200'"
+      />
     </div>
     <CardSettings />
   </div>
