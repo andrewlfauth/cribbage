@@ -1,7 +1,7 @@
 <script setup>
+import Button from '../Button.vue'
 import CardSettings from './CardSettings.vue'
 import ColorSettings from './ColorSettings.vue'
-import StartButton from './StartButton.vue'
 </script>
 
 <template>
@@ -10,11 +10,8 @@ import StartButton from './StartButton.vue'
   >
     <ColorSettings />
     <div class="hidden lg:block">
-      <StartButton />
+      <Button text="Start Game" :class="'text-4xl ring-gray-200'" />
     </div>
     <CardSettings />
-    <div class="mt-20 lg:hidden">
-      <StartButton />
-    </div>
   </div>
 </template>
