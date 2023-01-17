@@ -31,10 +31,6 @@ const flipCard = () => {
   }
 }
 
-onUpdated(() => {
-  flipCard()
-})
-
 const TEXT_CLASS =
   props?.card?.suit === '♥' || props?.card?.suit === '♦'
     ? 'text-red-700'
@@ -59,7 +55,9 @@ const themeBack = `background-image: url('${theme.card}');`
         <span :class="TEXT_CLASS" class="absolute text-3xl top-8 left-[13px]">{{
           props.card.suit
         }}</span>
-        <span :class="TEXT_CLASS" class="text-[78px]">♥</span>
+        <span :class="TEXT_CLASS" class="text-[78px]">{{
+          props.card.suit
+        }}</span>
         <span
           :class="TEXT_CLASS"
           class="absolute text-4xl font-bold tracking-tighter rotate-180 bottom-1 right-2"
@@ -67,7 +65,7 @@ const themeBack = `background-image: url('${theme.card}');`
         >
         <span
           :class="TEXT_CLASS"
-          class="absolute text-3xl bottom-8 right-[13px]"
+          class="absolute text-3xl bottom-9 right-[13px]"
           >{{ props.card.suit }}</span
         >
       </div>
@@ -86,13 +84,9 @@ const themeBack = `background-image: url('${theme.card}');`
 
 <style>
 .card {
-  position: absolute;
-  top: 50%;
-  left: 50%;
+  position: relative;
   width: 115px;
   height: 175px;
-  margin: -150px;
-  float: left;
   perspective: 500px;
 }
 
@@ -100,7 +94,6 @@ const themeBack = `background-image: url('${theme.card}');`
   position: absolute;
   width: 100%;
   height: 100%;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
   transform-style: preserve-3d;
 }
 
