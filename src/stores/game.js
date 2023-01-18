@@ -6,6 +6,7 @@ export const useGameStore = defineStore('game', () => {
   const game = reactive({
     stage: '',
     dealer: '',
+    deck: shuffle(newDeck()),
   })
 
   const changeStage = (stage) => (game.stage = stage)
@@ -15,4 +16,8 @@ export const useGameStore = defineStore('game', () => {
 
 function newDeck() {
   return SUITS.flatMap((suit) => VALUES.map((values) => ({ suit, ...values })))
+}
+
+function shuffle(array) {
+  return array.sort(() => Math.random() - 0.5)
 }
