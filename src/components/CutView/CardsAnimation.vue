@@ -12,7 +12,7 @@ import { gsap } from 'gsap'
 const props = defineProps({
   animateOut: false,
 })
-const emit = defineEmits(['cards-spread', 'cards-cut', 'result-msg', 'done'])
+const emit = defineEmits(['cards-spread', 'cards-cut', 'result', 'done'])
 
 const { game } = useGameStore()
 
@@ -82,11 +82,8 @@ const cutCards = async (e) => {
   tl.to(revealer.value, { zIndex: 20 }, '-=1')
   tl.to(revealer.value, { x: 0, ease: 'power1.in', duration: 0.4 })
 
-  const resultMsg =
-    usersCard.value.order < botsCard.value.order
-      ? 'You deal first!'
-      : 'Bot deals first'
-  tl.call(() => emit('result-msg', resultMsg), null, '+=0.2')
+  const dealer = usersCard.value.order < botsCard.value.order ? 'user' : 'bot'
+  tl.call(() => emit('result', dealer), null, '+=0.2')
 }
 
 watchEffect(() => {

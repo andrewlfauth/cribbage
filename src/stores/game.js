@@ -10,8 +10,9 @@ export const useGameStore = defineStore('game', () => {
   })
 
   const changeStage = (stage) => (game.stage = stage)
+  const setDealer = (dealer) => (game.dealer = dealer)
 
-  return { game, changeStage }
+  return { game, changeStage, setDealer }
 })
 
 function newDeck() {

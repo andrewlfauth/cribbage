@@ -4,14 +4,21 @@ import Card from '../Card.vue'
 import CardsAnimation from './CardsAnimation.vue'
 import { ref } from 'vue'
 import { useGameStore } from '../../stores/game'
-import { wait } from '../../utils/helpers'
 
-const { changeStage } = useGameStore()
+const { setDealer, changeStage } = useGameStore()
 
 const showInstructions = ref(false)
 const resultMsg = ref('')
 const animateOut = ref(false)
 const endStage = ref(false)
+
+const handleResults = (dealer) => {
+  dealer == 'user'
+    ? (resultMsg.value = 'You deal first!')
+    : (resultMsg.value = 'Bot deals first')
+
+  setDealer(dealer)
+}
 
 const startDealStage = () => {
   endStage.value = true
@@ -26,7 +33,7 @@ const startDealStage = () => {
       :animate-out="animateOut"
       @cards-spread="() => (showInstructions = true)"
       @cards-cut="() => (showInstructions = false)"
-      @result-msg="(msg) => (resultMsg = msg)"
+      @result="handleResults"
       @done="startDealStage"
     />
     <div v-if="endStage" class="absolute top-1/2 -translate-y-1/2">
