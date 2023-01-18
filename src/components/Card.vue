@@ -1,7 +1,7 @@
 <script setup>
 import { useThemeStore } from '../stores/theme'
 import { gsap } from 'gsap'
-import { ref, onUpdated } from 'vue'
+import { ref, watchEffect } from 'vue'
 
 const { theme } = useThemeStore()
 
@@ -30,6 +30,10 @@ const flipCard = () => {
     flipped.value = false
   }
 }
+
+watchEffect(() => {
+  if (props.flip) flipCard()
+})
 
 const TEXT_CLASS =
   props?.card?.suit === '♥' || props?.card?.suit === '♦'
