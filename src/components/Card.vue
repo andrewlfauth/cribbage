@@ -46,10 +46,13 @@ const themeBack = `background-image: url('${theme.card}');`
 
 <template>
   <div class="card">
-    <div ref="contentRef" class="duration-150 content">
+    <div
+      ref="contentRef"
+      class="border border-neutral-900 rounded-md duration-150 content"
+    >
       <div
         :class="{ front: !props.showBack, back: props.showBack }"
-        class="flex items-center justify-center bg-gray-200"
+        class="flex items-center justify-center rounded-md bg-gray-200"
       >
         <span
           :class="TEXT_CLASS"
@@ -74,11 +77,14 @@ const themeBack = `background-image: url('${theme.card}');`
         >
       </div>
 
-      <div :class="{ front: props.showBack, back: !props.showBack }">
+      <div
+        class="rounded-md"
+        :class="{ front: props.showBack, back: !props.showBack }"
+      >
         <div class="w-full h-full border-2 border-gray-200 rounded-md">
           <div
             :style="props.bg ? customBack : themeBack"
-            class="w-full h-full bg-gray-200 bg-center bg-cover rounded-md"
+            class="w-full h-full bg-gray-200 bg-center bg-cover rounded-md border border-neutral-800"
           ></div>
         </div>
       </div>
@@ -111,7 +117,6 @@ const themeBack = `background-image: url('${theme.card}');`
   color: #03446a;
   text-align: center;
   font-size: 60px;
-  border-radius: 5px;
   backface-visibility: hidden;
 }
 
