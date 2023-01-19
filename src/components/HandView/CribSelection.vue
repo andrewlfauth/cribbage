@@ -5,6 +5,7 @@ import { gsap } from 'gsap'
 import Flip from 'gsap/Flip'
 import { ref } from 'vue'
 import { removeObjFromArray, arrayIncludesObject } from '../../utils/helpers'
+import Button from '../Button.vue'
 
 gsap.registerPlugin(Flip)
 
@@ -27,25 +28,22 @@ const selectCard = (selection) => {
 
     usersHandEl.value.appendChild(el)
     gsap.to(el, { boxShadow: '10px 10px 5px 0px rgba(0,0,0,0.65)' })
-    gsap.to(el, { boxShadow: 'none', delay: 1, duration: 0.2 })
+    gsap.to(el, { boxShadow: 'none', delay: 0.7, duration: 0.2 })
 
     selectedCards.value = removeObjFromArray(selection, selectedCards.value)
   } else {
     if (selectedCards.value.length == 2) return
     crib.value.appendChild(el)
     gsap.to(el, { boxShadow: '10px 10px 5px 0px rgba(0,0,0,0.65)' })
-    gsap.to(el, { boxShadow: 'none', delay: 1, duration: 0.2 })
-    el.style.zIndex = 50
+    gsap.to(el, { boxShadow: 'none', delay: 0.7, duration: 0.2 })
+    el.style.zIndex = 10
 
     selectedCards.value.push(selection)
   }
 
   Flip.from(state, {
-    duration: 1,
+    duration: 0.7,
     ease: 'power1.inOut',
-    // zIndex: 50,
-    // absolute: true,
-    // scale: true,
   })
 }
 </script>
@@ -66,10 +64,24 @@ const selectCard = (selection) => {
         class="absolute left-8"
       />
 
-      <div
-        ref="crib"
-        class="border border-white flex w-[200px] h-[175px] -space-x-8"
-      ></div>
+      <div ref="crib" class="border-white flex w-[230px] h-[175px] relative">
+        <span
+          class="absolute inset-0 mx-auto w-fit -top-10 text-xl text-red-400 font-medium"
+          >Your crib</span
+        >
+        <Button
+          text="Throw"
+          class="h-fit absolute inset-0 mx-auto my-auto z-20 bg-gray-900 border-gray-700"
+          :class="{
+            'opacity-0': selectedCards.length != 2,
+          }"
+        />
+        <span
+          :class="{ 'opacity-0': selectedCards.length }"
+          class="absolute duration-500 inset-0 my-auto block mx-auto w-fit h-fit text-gray-400 tracking-tight"
+          >Select 2 cards for crib</span
+        >
+      </div>
     </div>
 
     <div
