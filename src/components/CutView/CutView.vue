@@ -1,9 +1,9 @@
 <script setup>
 import Button from '../Button.vue'
 import Card from '../Card.vue'
-import CardsAnimation from './CardsAnimation.vue'
 import { ref } from 'vue'
 import { useGameStore } from '../../stores/game'
+import CutAnimation from './CutAnimation.vue'
 
 const { setDealer, changeStage } = useGameStore()
 
@@ -28,7 +28,7 @@ const startDealStage = () => {
 
 <template>
   <div class="w-full h-full p-8 flex items-center">
-    <CardsAnimation
+    <CutAnimation
       :class="{ 'opacity-0 duration-300': endStage }"
       :animate-out="animateOut"
       @cards-spread="() => (showInstructions = true)"
