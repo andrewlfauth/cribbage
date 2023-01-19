@@ -8,15 +8,19 @@ export const useGameStore = defineStore('game', () => {
     stage: '',
     dealer: '',
     deck: shuffle(newDeck()),
+    usersHand: [],
+    botsHand: [],
   })
 
   const changeStage = (stage) => (game.stage = stage)
   const setDealer = (dealer) => (game.dealer = dealer)
-  const removeCardFromDeck = (card) => {
-    game.deck = game.deck.filter((c) => !objectsEqual(c, card))
+  const addCardToHand = (card, player) => {
+    if (player == 'user') game.usersHand.push(card)
+    else game.botsHand.push(card)
+    console.log(game)
   }
 
-  return { game, changeStage, setDealer, removeCardFromDeck }
+  return { game, changeStage, setDealer, removeCardsFromDeck, addCardToHand }
 })
 
 function newDeck() {

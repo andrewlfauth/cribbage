@@ -8,7 +8,9 @@ import Flip from 'gsap/Flip'
 
 gsap.registerPlugin(Flip)
 
-const { game, removeCardFromDeck } = useGameStore()
+const { game, addCardToHand } = useGameStore()
+
+const emit = defineEmits(['cards-dealt'])
 
 const deck = ref(null)
 const usersHandEl = ref(null)
@@ -26,18 +28,13 @@ onMounted(async () => {
       let usersCard = cards.pop()
       botsHand.push(botsCard)
       usersHand.push(usersCard)
-      removeCardFromDeck(botsCard)
-      removeCardFromDeck(usersCard)
     } else {
-      let botsCard = cards.pop()
       let usersCard = cards.pop()
-      botsHand.push(botsCard)
+      let botsCard = cards.pop()
       usersHand.push(usersCard)
-      removeCardFromDeck(botsCard)
-      removeCardFromDeck(usersCard)
+      botsHand.push(botsCard)
     }
   }
-
   usersHand.sort(
     (a, b) => parseInt(a.dataset.order) - parseInt(b.dataset.order)
   )
@@ -55,6 +52,9 @@ onMounted(async () => {
       dealCard(usersHand[i], 'user', i)
     }
   }
+  setTimeout(() => {
+    emit('cards-dealt')
+  }, 1100)
 })
 
 async function dealCard(card, player, i) {
@@ -64,9 +64,12 @@ async function dealCard(card, player, i) {
   card.style.position = 'relative'
   card.style.zIndex = 10
 
-  player == 'user'
-    ? usersHandEl.value.appendChild(card)
-    : botsHandEl.value.appendChild(card)
+  if (player == 'user') {
+    usersHandEl.value.appendChild(card)
+  } else {
+    botsHandEl.value.appendChild(card)
+  }
+  addCardToHand(card, player)
 
   Flip.from(state, {
     duration: 1,
@@ -88,6 +91,7 @@ async function dealCard(card, player, i) {
     <div ref="deck" class="flex relative h-[175px]">
       <Card
         v-for="card in game.deck"
+        :key="card"
         v-bind:data-card="JSON.stringify(card)"
         v-bind:data-order="card.order"
         :flip="objectsEqual(dealtCard, card)"
