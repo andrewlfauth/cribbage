@@ -10,6 +10,12 @@ let simulatedStage = ref('deal')
 
 const handleCardsDealt = () => {
   simulatedStage.value = 'crib-selection'
+  // change stage
+}
+
+const handleCribSelected = () => {
+  simulatedStage.value = 'pegging'
+  // chnage stage
 }
 </script>
 
@@ -18,5 +24,8 @@ const handleCardsDealt = () => {
     v-if="simulatedStage == 'deal'"
     @cards-dealt="handleCardsDealt"
   />
-  <CribSelection v-if="simulatedStage == 'crib-selection'" />
+  <CribSelection
+    v-if="simulatedStage == 'crib-selection'"
+    @end-stage="handleCribSelected"
+  />
 </template>

@@ -1,6 +1,6 @@
 import { reactive } from 'vue'
 import { SUITS, VALUES } from '../data/cards'
-import { objectsEqual } from '../utils/helpers'
+import { objectsEqual, removeObjFromArray } from '../utils/helpers'
 import { defineStore } from 'pinia'
 
 export const useGameStore = defineStore('game', () => {
@@ -18,9 +18,13 @@ export const useGameStore = defineStore('game', () => {
     if (player == 'user') game.usersHand.push(card)
     else game.botsHand.push(card)
   }
-  const removeCardsFromDeck = (cards) => game.deck.splice(-Math.abs(cards))
 
-  return { game, changeStage, setDealer, removeCardsFromDeck, addCardToHand }
+  return {
+    game,
+    changeStage,
+    setDealer,
+    addCardToHand,
+  }
 })
 
 function newDeck() {
