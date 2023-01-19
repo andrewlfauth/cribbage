@@ -24,15 +24,11 @@ onMounted(async () => {
 
   for (let i = 0; i < 6; i++) {
     if (game.dealer == 'user') {
-      let botsCard = cards.pop()
-      let usersCard = cards.pop()
-      botsHand.push(botsCard)
-      usersHand.push(usersCard)
+      botsHand.push(cards.pop())
+      usersHand.push(cards.pop())
     } else {
-      let usersCard = cards.pop()
-      let botsCard = cards.pop()
-      usersHand.push(usersCard)
-      botsHand.push(botsCard)
+      usersHand.push(cards.pop())
+      botsHand.push(cards.pop())
     }
   }
   usersHand.sort(
@@ -69,7 +65,7 @@ async function dealCard(card, player, i) {
   } else {
     botsHandEl.value.appendChild(card)
   }
-  addCardToHand(card, player)
+  addCardToHand(cardObj, player)
 
   Flip.from(state, {
     duration: 1,
