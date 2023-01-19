@@ -17,8 +17,8 @@ export const useGameStore = defineStore('game', () => {
   const addCardToHand = (card, player) => {
     if (player == 'user') game.usersHand.push(card)
     else game.botsHand.push(card)
-    console.log(game)
   }
+  const removeCardsFromDeck = (cards) => game.deck.splice(-Math.abs(cards))
 
   return { game, changeStage, setDealer, removeCardsFromDeck, addCardToHand }
 })

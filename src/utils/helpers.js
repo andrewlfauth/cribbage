@@ -20,3 +20,11 @@ export function getSplitCenteredXOffset(el, side) {
     ? windowWidth / 2 - right + el.offsetWidth / 2 - el.offsetWidth
     : windowWidth / 2 - right + el.offsetWidth / 2 + el.offsetWidth
 }
+
+export function arrayIncludesObject(obj, array) {
+  return array.some((item) => objectsEqual(item, obj))
+}
+
+export function removeObjFromArray(obj, array) {
+  return array.filter((item) => !objectsEqual(item, obj))
+}
