@@ -109,6 +109,7 @@ watchEffect(() => {
     <div ref="spread" class="relative flex -space-x-[6.25rem]">
       <div
         v-for="card in game.deck"
+        :key="card"
         @click="cutCards"
         v-bind:data-card="JSON.stringify(card)"
         class="z-10 duration-100 origin-bottom"
