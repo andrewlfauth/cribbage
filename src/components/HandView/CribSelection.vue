@@ -34,9 +34,9 @@ const selectCard = (selection) => {
   } else {
     if (selectedCards.value.length == 2) return
     crib.value.appendChild(el)
+    el.style.zIndex = 30
     gsap.to(el, { boxShadow: '10px 10px 5px 0px rgba(0,0,0,0.65)' })
-    gsap.to(el, { boxShadow: 'none', delay: 0.7, duration: 0.2 })
-    el.style.zIndex = 10
+    gsap.to(el, { boxShadow: 'none', zIndex: 0, delay: 0.7, duration: 0.2 })
 
     selectedCards.value.push(selection)
   }
@@ -71,9 +71,9 @@ const selectCard = (selection) => {
         >
         <Button
           text="Throw"
-          class="h-fit absolute inset-0 mx-auto my-auto z-20 bg-gray-900 border-gray-700"
+          class="h-fit absolute inset-0 mx-auto my-auto z-50 bg-gray-900 border-gray-700"
           :class="{
-            'opacity-0': selectedCards.length != 2,
+            'opacity-0 pointer-events-none': selectedCards.length != 2,
           }"
         />
         <span
