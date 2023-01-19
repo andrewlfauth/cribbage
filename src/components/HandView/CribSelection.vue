@@ -126,7 +126,7 @@ const endStage = async () => {
   <div class="flex flex-col h-full justify-between p-8 relative">
     <div
       ref="cribHome"
-      class="absolute w-[115px] h-[175px] border"
+      class="absolute w-[115px] h-[175px]"
       :class="{
         'bottom-8': game.dealer == 'user',
         'top-8': game.dealer == 'bot',
@@ -161,9 +161,13 @@ const endStage = async () => {
           class="rounded-md border-gray-700 flex w-[230px] h-[175px]"
         ></div>
         <span
-          class="absolute inset-0 mx-auto w-fit -top-10 text-xl text-red-400 font-medium"
-          :class="{ 'opacity-0': animationStart }"
-          >Your crib</span
+          class="absolute inset-0 mx-auto w-fit -top-10 text-xl font-medium"
+          :class="{
+            'opacity-0': animationStart,
+            'text-red-400': game.dealer == 'user',
+            'text-blue-400': game.dealer == 'bot',
+          }"
+          >{{ game.dealer == 'user' ? 'Your crib' : "Bot's crib" }}</span
         >
         <Button
           text="Throw"
