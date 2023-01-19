@@ -45,7 +45,7 @@ const themeBack = `background-image: url('${theme.card}');`
 </script>
 
 <template>
-  <div class="card">
+  <div class="card cursor-pointer" @click="$emit('clicked', props.card)">
     <div
       ref="contentRef"
       class="border border-neutral-900 rounded-md duration-150 content"
