@@ -1,5 +1,6 @@
 import { reactive } from 'vue'
 import { SUITS, VALUES } from '../data/cards'
+import { objectsEqual } from '../utils/helpers'
 import { defineStore } from 'pinia'
 
 export const useGameStore = defineStore('game', () => {
@@ -11,8 +12,11 @@ export const useGameStore = defineStore('game', () => {
 
   const changeStage = (stage) => (game.stage = stage)
   const setDealer = (dealer) => (game.dealer = dealer)
+  const removeCardFromDeck = (card) => {
+    game.deck = game.deck.filter((c) => !objectsEqual(c, card))
+  }
 
-  return { game, changeStage, setDealer }
+  return { game, changeStage, setDealer, removeCardFromDeck }
 })
 
 function newDeck() {
