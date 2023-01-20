@@ -101,10 +101,16 @@ const throwCards = async () => {
     '+=.5'
   )
   tl.to(crib.value.children[1], { x: '-100%' }, '-=.5')
+
   tl.call(endStage)
 }
 
 const endStage = async () => {
+  const cribCards = [...crib.value.children].map((el) =>
+    JSON.parse(el.dataset.card)
+  )
+  game.crib = cribCards
+
   await wait(1)
   flipCutCard.value = true
 

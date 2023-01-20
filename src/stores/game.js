@@ -10,6 +10,7 @@ export const useGameStore = defineStore('game', () => {
     deck: shuffle(newDeck()),
     usersHand: [],
     botsHand: [],
+    crib: [],
   })
 
   const changeStage = (stage) => (game.stage = stage)
