@@ -110,10 +110,8 @@ const endStage = async () => {
     JSON.parse(el.dataset.card)
   )
   game.crib = cribCards
-
   await wait(1)
   flipCutCard.value = true
-
   let usersHand = [...usersHandHome.value.children].map((el) =>
     JSON.parse(el.dataset.card)
   )
@@ -121,10 +119,8 @@ const endStage = async () => {
     JSON.parse(el.dataset.card)
   )
 
-  game.usersHand = usersHand
-  game.botsHand = botsHand
-
-  emit('end-stage')
+  await wait(1)
+  emit('end-stage', usersHand, botsHand)
 }
 </script>
 

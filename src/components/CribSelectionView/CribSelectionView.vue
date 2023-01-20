@@ -13,8 +13,12 @@ const handleCardsDealt = () => {
   // change stage
 }
 
-const handleCribSelected = () => {
+const handleCribSelected = (usersHand, botsHand) => {
   simulatedStage.value = 'pegging'
+  game.usersHand = usersHand
+  game.botsHand = botsHand
+
+  changeStage('pegging')
   // chnage stage
 }
 </script>
