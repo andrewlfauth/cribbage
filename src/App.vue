@@ -3,6 +3,7 @@ import Card from './components/Card.vue'
 import CutView from './components/CutView/CutView.vue'
 import CribSelectionView from './components/CribSelectionView/CribSelectionView.vue'
 import StartView from './components/StartView/StartView.vue'
+import PeggingView from './components/PeggingView/PeggingView.vue'
 import { useGameStore } from './stores/game'
 
 const { game } = useGameStore()
@@ -12,6 +13,7 @@ const { game } = useGameStore()
     <!-- <StartView v-if="!game.stage" />
     <CutView v-if="game.stage == 'cut'" />
     <CribSelectionView v-if="game.stage == 'deal'" /> -->
-    <CribSelectionView v-if="true" />
+    <CribSelectionView v-if="game.stage == ''" />
+    <PeggingView v-if="game.stage == 'pegging'" />
   </main>
 </template>
