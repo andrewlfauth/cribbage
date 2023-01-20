@@ -1,6 +1,5 @@
 import { reactive } from 'vue'
 import { SUITS, VALUES } from '../data/cards'
-import { objectsEqual, removeObjFromArray } from '../utils/helpers'
 import { defineStore } from 'pinia'
 
 export const useGameStore = defineStore('game', () => {
