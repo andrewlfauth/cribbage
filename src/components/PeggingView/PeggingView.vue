@@ -16,6 +16,7 @@ const activeCards = ref(null)
 const spentCards = ref(null)
 const userHand = ref(null)
 const botHand = ref(null)
+const peggingCount = ref(null)
 
 let state
 
@@ -25,6 +26,12 @@ onMounted(() => {
   } else {
     startTurn('user')
   }
+
+  gsap.from(peggingCount.value, {
+    x: -250,
+    ease: 'elastic.out(.4, 0.5)',
+    duration: 0.7,
+  })
 })
 
 const selectCard = (card) => {
@@ -131,6 +138,16 @@ const animateCardPlay = (card, botsTurn) => {
     <div
       class="flex min-h-[175px] relative w-full border-green-500 boder justify-end"
     >
+      <div
+        ref="peggingCount"
+        style="box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.85)"
+        class="absolute left-4 flex-col top-10 z-10 px-3 py-2 border border-gray-600 rounded-md bg-gray-800 flex items-center space-x-2"
+      >
+        <span class="font-light text-sm text-gray-300"> Pegging count: </span>
+        <span class="text-4xl font-medium pt-1 text-gray-100 tracking-tight">{{
+          pegging.count
+        }}</span>
+      </div>
       <div class="absolute left-0">
         <Card
           :card="game.deck[19]"
