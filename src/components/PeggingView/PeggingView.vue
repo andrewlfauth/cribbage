@@ -1,17 +1,104 @@
 <script setup>
 import Card from '../Card.vue'
 import { useGameStore } from '../../stores/game'
-import { onMounted } from 'vue'
+import { usePeggingStore } from '../../stores/pegging'
+import { objectsEqual, wait } from '../../utils/helpers'
+import { ref, onMounted, watchEffect } from 'vue'
+import { gsap } from 'gsap'
+import Flip from 'gsap/Flip'
+
+gsap.registerPlugin(Flip)
 
 const { game } = useGameStore()
+const { pegging, playCard, getBotsCard, startTurn } = usePeggingStore()
+
+const activeCards = ref(null)
+const spentCards = ref(null)
+const userHand = ref(null)
+const botHand = ref(null)
+
+let state
 
 onMounted(() => {
-  console.log(game)
+  if (pegging.dealer == 'user') {
+    startTurn('bot')
+  } else {
+    startTurn('user')
+  }
 })
+
+const selectCard = (card) => {
+  if (pegging.waitForUserCard) {
+    playCard(card)
+    animateCardPlay(card)
+  }
+}
+
+const botsTurn = async () => {
+  await wait(1)
+  startTurn('bot')
+  if (pegging.waitForBotCard) {
+    let card = getBotsCard()
+    playCard(card, 'bot')
+    animateCardPlay(card, true)
+  }
+}
+
+watchEffect(() => {
+  if (pegging.waitForBotCard) {
+    botsTurn()
+  }
+})
+
+const animateSpentCards = async () => {
+  await wait(0.7)
+  if (pegging.spent.length) {
+    state = Flip.getState(activeCards.value?.children)
+
+    let oldActiveCards = [...activeCards.value.children]
+    oldActiveCards.forEach((card) => spentCards.value.appendChild(card))
+
+    Flip.from(state, {
+      duration: 0.7,
+      ease: 'power1.inOut',
+    })
+  }
+}
+
+watchEffect(() => {
+  if (pegging.spent?.length) {
+    animateSpentCards()
+  }
+})
+
+const animateCardPlay = (card, botsTurn) => {
+  let cardEl = document.querySelector(`[data-card='${JSON.stringify(card)}']`)
+
+  botsTurn
+    ? (state = Flip.getState(botHand.value.children))
+    : (state = Flip.getState(userHand.value.children))
+
+  activeCards.value.appendChild(cardEl)
+
+  gsap.to(cardEl, {
+    zIndex: 50,
+    boxShadow: '10px 10px 5px 0px rgba(0,0,0,0.65)',
+  })
+  gsap.to(cardEl, {
+    zIndex: 0,
+    boxShadow: 'none',
+    delay: 0.7,
+  })
+
+  Flip.from(state, {
+    duration: 0.7,
+    ease: 'power1.inOut',
+  })
+}
 </script>
 
 <template>
-  <div class="flex flex-col h-full justify-between p-8 relative">
+  <div class="relative flex flex-col justify-between h-full p-8">
     <div
       class="absolute w-[115px] h-[175px]"
       :class="{
@@ -28,7 +115,7 @@ onMounted(() => {
       />
     </div>
     <div
-      ref="botsHandHome"
+      ref="botHand"
       class="h-[175px] w-[410px] self-center flex justify-center -space-x-14"
     >
       <Card
@@ -36,12 +123,15 @@ onMounted(() => {
         :card="card"
         :show-back="true"
         :key="card"
+        :flip="pegging.active.some((c) => objectsEqual(c, card))"
         :class="'cursor-default'"
       />
     </div>
 
-    <div class="flex justify-center min-h-[175px]">
-      <div class="absolute left-8">
+    <div
+      class="flex min-h-[175px] relative w-full border-green-500 boder justify-end"
+    >
+      <div class="absolute left-0">
         <Card
           :card="game.deck[19]"
           class="absolute cursor-default"
@@ -49,13 +139,35 @@ onMounted(() => {
         />
         <Card :card="game.deck[20]" class="absolute cursor-default" />
       </div>
+
+      <div class="flex w-3/4">
+        <div
+          ref="activeCards"
+          class="h-full w-1/2 flex -space-x-[4.9rem]"
+        ></div>
+        <div
+          ref="spentCards"
+          class="h-full w-1/2 flex -space-x-[4.9rem] justify-end"
+        ></div>
+      </div>
     </div>
 
-    <div
-      ref="usersHandHome"
-      class="h-[175px] w-[410px] self-center flex justify-center -space-x-14"
-    >
-      <Card v-for="card in game.usersHand" :card="card" :key="card" />
+    <div class="w-fit mx-auto relative">
+      <span
+        class="absolute -top-10 block w-full text-center text-gray-400 duration-300"
+        >{{ pegging.turn }}'s turn to play a card</span
+      >
+      <div
+        ref="userHand"
+        class="h-[175px] w-[410px] self-center flex justify-center -space-x-14"
+      >
+        <Card
+          v-for="card in game.usersHand"
+          :card="card"
+          :key="card"
+          @clicked="selectCard"
+        />
+      </div>
     </div>
   </div>
 </template>
