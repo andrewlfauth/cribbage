@@ -124,7 +124,9 @@ export const usePeggingStore = defineStore('pegging', () => {
     pegging.spent = pegging.spent.concat(pegging.active)
     pegging.count = 0
     pegging.active = []
-    pegging.opponent = ''
+    if (pegging.opponent == 'go') {
+      pegging.opponent = ''
+    }
     await wait(1)
     pegging.go = { user: false, bot: false }
   }
