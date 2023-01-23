@@ -126,7 +126,7 @@ export const usePeggingStore = defineStore('pegging', () => {
   const resetPegging = async () => {
     pegging.spent = pegging.spent.concat(pegging.active)
     pegging.count = 0
-    pegging.cards = []
+    pegging.active = []
     pegging.opponent = ''
     await wait(1)
     pegging.go = { user: false, bot: false }
