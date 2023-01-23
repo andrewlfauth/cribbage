@@ -79,6 +79,8 @@ export const usePeggingStore = defineStore('pegging', () => {
   }
 
   const switchTurns = () => {
+    checkForPairs()
+    checkForRun()
     awardPoints(pegging.turnScore, pegging.turn)
     pegging.waitForUserCard = false
     pegging.waitForBotCard = false
@@ -121,6 +123,88 @@ export const usePeggingStore = defineStore('pegging', () => {
     pegging.cards = []
     pegging.opponent = ''
     pegging.doubleGo = false
+  }
+
+  const checkForPairs = () => {
+    let cards = [...pegging.active]
+    let pairs = 0
+
+    if (cards.length < 2) return
+    for (let i = 0; i < cards.length; i++) {
+      let c = cards.pop()
+      if (c.value === cards[cards.length - 1].value) {
+        pairs++
+      } else break
+    }
+
+    if (pairs) {
+      let pointTotal = pairs * (pairs + 1)
+      pegging.turnScore.push({
+        points: pointTotal,
+        message: pointTotal + ' for a pair',
+      })
+    }
+  }
+
+  const checkForRun = () => {
+    let cards = [...pegging.active].map((c) => c.order)
+    let card = cards.pop()
+    let idxs = []
+    let nextCard = card - 1
+
+    for (let i = 0; i < cards.length; i++) {
+      let nextIdx = cards.lastIndexOf(nextCard)
+      if (nextIdx !== -1) {
+        nextCard -= 1
+        idxs.push(nextIdx)
+      } else break
+    }
+
+    nextCard = card + 1
+    for (let i = 0; i < cards.length; i++) {
+      let nextIdx = cards.lastIndexOf(nextCard)
+      if (nextIdx !== -1) {
+        nextCard += 1
+        idxs.push(nextIdx)
+      } else break
+    }
+
+    if (idxs.length < 2 || Math.max(...idxs) < cards.length - 1) {
+      return
+    }
+
+    let sorted = [...idxs].sort((a, b) => b - a)
+    let run = []
+
+    for (let i = 0; i < sorted.length; i++) {
+      let n = sorted[i]
+      if (sorted[i + 1] == n - 1) {
+        run.push(n)
+      } else {
+        run.push(n)
+        break
+      }
+    }
+    if (run.length < 2) return
+
+    let sliced = cards
+      .slice(Math.min(...run))
+      .concat([card])
+      .sort((a, b) => a - b)
+
+    for (let i = 0; i < sliced.length; i++) {
+      if (i == sliced.length - 1) {
+        return pegging.turnScore.push({
+          points: sliced.length,
+          message: sliced.length + ' for run of ' + sliced.length,
+        })
+      }
+      if (sliced[i + 1] == sliced[i] + 1) {
+        continue
+      } else {
+        break
+      }
+    }
   }
 
   return { pegging, playCard, getBotsCard, startTurn }
