@@ -2,7 +2,7 @@ import { reactive } from 'vue'
 import { defineStore } from 'pinia'
 import { useGameStore } from './game'
 import { useScoreStore } from './score'
-import { objectsEqual } from '../utils/helpers'
+import { objectsEqual, wait } from '../utils/helpers'
 
 export const usePeggingStore = defineStore('pegging', () => {
   const { game } = useGameStore()
@@ -15,7 +15,7 @@ export const usePeggingStore = defineStore('pegging', () => {
     user: { hand: game.usersHand },
     bot: { hand: game.botsHand },
     opponent: '',
-    doubleGo: false,
+    go: { user: false, bot: false },
     turn: game.dealer == 'user' ? 'bot' : 'user',
     waitForUserCard: false,
     waitForBotCard: false,
@@ -49,24 +49,22 @@ export const usePeggingStore = defineStore('pegging', () => {
     )
 
     if (pegging.opponent == 'go' && turnIsAGo() && pegging.count != 31) {
-      console.log('1 for go')
+      pegging.go[player] = true
+      console.log(player + ' is a go')
       pegging.turnScore.push({ points: 1, message: '1 for Go' })
       return switchTurns()
     }
     if (pegging.count == 31) {
-      console.log('2 for 31')
       pegging.turnScore.push({ points: 2, message: '2 for 31' })
       resetPegging()
       return switchTurns()
     }
     if (pegging.count == 15) {
-      console.log('2 for 15')
       pegging.turnScore.push({ points: 2, message: '2 for 15' })
       return switchTurns()
     }
     if (!pegging[player].hand?.length) {
       if (pegging.opponent == 'out') {
-        console.log('1 for last card')
         pegging.turnScore.push({ points: 1, message: '1 for last card' })
         // End stage
       } else {
@@ -95,18 +93,25 @@ export const usePeggingStore = defineStore('pegging', () => {
       return true
   }
 
-  const handleGo = () => {
+  const handleGo = async () => {
+    let player = pegging.turn
+
     if (pegging.opponent == 'go') {
-      pegging.doubleGo = true
+      await wait(1)
+      pegging.go[player] = true
       pegging.turnScore.push({ points: 1, message: '1 for Go' })
       resetPegging()
       return switchTurns()
     }
     if (pegging.opponent === 'out') {
+      pegging.go[player] = true
+      console.log(player + ' is a go')
       resetPegging()
       return startTurn(pegging.turn)
     }
     pegging.opponent = 'go'
+    pegging.go[player] = true
+    console.log(player + ' is a go')
     return switchTurns()
   }
 
@@ -117,12 +122,13 @@ export const usePeggingStore = defineStore('pegging', () => {
     return possibles[0]
   }
 
-  const resetPegging = () => {
+  const resetPegging = async () => {
     pegging.spent = pegging.spent.concat(pegging.active)
     pegging.count = 0
     pegging.cards = []
     pegging.opponent = ''
-    pegging.doubleGo = false
+    await wait(1)
+    pegging.go = { user: false, bot: false }
   }
 
   const checkForPairs = () => {

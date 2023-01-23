@@ -6,6 +6,7 @@ import { objectsEqual, wait } from '../../utils/helpers'
 import { ref, onMounted, watchEffect } from 'vue'
 import { gsap } from 'gsap'
 import Flip from 'gsap/Flip'
+import GoIndicator from './GoIndicator.vue'
 
 gsap.registerPlugin(Flip)
 
@@ -54,6 +55,15 @@ const botsTurn = async () => {
 watchEffect(() => {
   if (pegging.waitForBotCard) {
     botsTurn()
+  }
+})
+
+watchEffect(() => {
+  if (pegging.go.user) {
+    console.log('USER GO')
+  }
+  if (pegging.go.bot) {
+    console.log('BOT GO')
   }
 })
 
@@ -157,6 +167,15 @@ const animateCardPlay = (card, botsTurn) => {
         <Card :card="game.deck[20]" class="absolute cursor-default" />
       </div>
 
+      <GoIndicator
+        :show="pegging.go.bot"
+        class="-top-36 text-blue-400 border-blue-400 t-current:text-purple-400 t-current:border-purple-400 t-domino:text-black t-domino:border-black"
+      />
+      <GoIndicator
+        :show="pegging.go.user"
+        class="-bottom-36 text-red-400 border-red-400 t-current:text-green-400 t-domino:text-gray-100"
+      />
+
       <div class="flex w-3/4">
         <div
           ref="activeCards"
@@ -170,10 +189,6 @@ const animateCardPlay = (card, botsTurn) => {
     </div>
 
     <div class="w-fit mx-auto relative">
-      <span
-        class="absolute -top-10 block w-full text-center text-gray-400 duration-300"
-        >{{ pegging.turn }}'s turn to play a card</span
-      >
       <div
         ref="userHand"
         class="h-[175px] w-[410px] self-center flex justify-center -space-x-14"
