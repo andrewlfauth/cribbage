@@ -10,10 +10,11 @@ import GoIndicator from './GoIndicator.vue'
 
 gsap.registerPlugin(Flip)
 
-const { game } = useGameStore()
+const { game, changeStage } = useGameStore()
 const { pegging, playCard, getBotsCard, startTurn } = usePeggingStore()
 
 const botsFlippedCards = ref([])
+const cardsPlayed = ref(0)
 
 const activeCards = ref(null)
 const spentCards = ref(null)
@@ -41,6 +42,7 @@ const selectCard = (card) => {
   if (pegging.waitForUserCard) {
     playCard(card)
     animateCardPlay(card)
+    cardsPlayed.value++
   }
 }
 
@@ -52,6 +54,7 @@ const botsTurn = async () => {
     botsFlippedCards.value.push(card)
     playCard(card, 'bot')
     animateCardPlay(card, true)
+    cardsPlayed.value++
   }
 }
 
@@ -66,8 +69,11 @@ const animateSpentCards = async () => {
   if (pegging.spent.length) {
     state = Flip.getState(activeCards.value?.children)
 
-    let oldActiveCards = [...activeCards.value.children]
-    oldActiveCards.forEach((card) => spentCards.value.appendChild(card))
+    let oldActiveCards = [...activeCards.value.children].reverse()
+    oldActiveCards.forEach((card) => {
+      card.style.zIndex = 0
+      spentCards.value.prepend(card)
+    })
 
     Flip.from(state, {
       duration: 0.7,
@@ -106,6 +112,46 @@ const animateCardPlay = (card, botsTurn) => {
     ease: 'power1.inOut',
   })
 }
+
+const animateOut = async () => {
+  let tl = gsap.timeline()
+  animateSpentCards()
+  await wait(2)
+  let cards = [...spentCards.value.children]
+  let usersCards = cards.filter((card) =>
+    game.usersHand.some((c) => objectsEqual(c, JSON.parse(card.dataset.card)))
+  )
+  let botsCards = cards.filter((card) =>
+    game.botsHand.some((c) => objectsEqual(c, JSON.parse(card.dataset.card)))
+  )
+
+  let state = Flip.getState(spentCards.value.children)
+  usersCards
+    .sort(
+      (a, b) =>
+        JSON.parse(a.dataset.card).order - JSON.parse(b.dataset.card).order
+    )
+    .forEach((el) => userHand.value.appendChild(el))
+  botsCards
+    .sort(
+      (a, b) =>
+        JSON.parse(a.dataset.card).order - JSON.parse(b.dataset.card).order
+    )
+    .forEach((el) => botHand.value.appendChild(el))
+
+  Flip.from(state, {
+    duration: 0.7,
+    ease: 'power1.inOut',
+  })
+  tl.to(peggingCount.value, { x: -250, delay: 1 })
+  tl.call(() => changeStage('count'))
+}
+
+watchEffect(() => {
+  if (cardsPlayed.value == 8) {
+    animateOut()
+  }
+})
 </script>
 
 <template>

@@ -51,7 +51,6 @@ export const usePeggingStore = defineStore('pegging', () => {
     if (!pegging[player].hand?.length) {
       if (pegging.opponent == 'out') {
         pegging.turnScore.push({ points: 1, message: '1 for last card' })
-        // End stage
       } else {
         pegging.opponent = 'out'
       }
