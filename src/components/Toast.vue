@@ -23,16 +23,21 @@ const classObject = computed(() => ({
 <template>
   <div
     ref="toast"
-    class="absolute opacity-0 top-1/2 -translate-y-1/2 left-0 right-0 mx-auto bg-red400 text-gray-300 border-2 border-gray-700 py-1 z-50 w-fit rounded-full pointer-events-none flex items-center pr-4 bg-gray-900"
+    class="absolute left-0 right-0 z-50 flex items-center py-1 pl-2 pr-5 mx-auto space-x-2 text-lg text-gray-300 -translate-y-1/2 bg-gray-900 border-2 border-gray-700 rounded-full opacity-0 pointer-events-none top-1/2 w-fit"
   >
-    <span
-      class="text-red-400 font-semibold text-2xl rounded-full w-[33px] -ml-[1px] flex items-center justify-center mr-3 before:content-['+'] before:text-xs before:mr-1 pl-3"
-      :class="classObject"
+    <div
+      v-for="message in score.flashMessage.messages"
+      class="flex items-center"
     >
-      {{ score.flashMessage.message[0] }}
-    </span>
-    <span>
-      {{ score.flashMessage.message.slice(1) }}
-    </span>
+      <span
+        class="text-red-400 font-semibold text-2xl rounded-full w-[33px] flex items-center justify-center mr-3 before:content-['+'] before:text-sm before:mr-[2px] pl-3"
+        :class="classObject"
+      >
+        {{ message[0] }}
+      </span>
+      <span>
+        {{ message.slice(1) }}
+      </span>
+    </div>
   </div>
 </template>
