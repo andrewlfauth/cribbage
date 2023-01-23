@@ -34,6 +34,7 @@ onMounted(async () => {
   usersHand.sort(
     (a, b) => parseInt(a.dataset.order) - parseInt(b.dataset.order)
   )
+  botsHand.sort((a, b) => parseInt(a.dataset.order) - parseInt(b.dataset.order))
 
   for (let i = 0; i < 6; i++) {
     if (game.dealer == 'bot') {
@@ -79,7 +80,7 @@ async function dealCard(card, player, i) {
 </script>
 
 <template>
-  <div class="flex flex-col h-full justify-between p-8">
+  <div class="flex flex-col justify-between h-full p-8">
     <div
       ref="botsHandEl"
       class="h-[175px] w-[410px] self-center flex items-center -space-x-14"
