@@ -61,7 +61,6 @@ export const usePeggingStore = defineStore('pegging', () => {
 
     if (pegging.opponent == 'go' && turnIsAGo() && pegging.count != 31) {
       pegging.go[player] = true
-      console.log(player + ' is a go')
       pegging.turnScore.push({ points: 1, message: '1 for Go' })
       return switchTurns()
     }
@@ -106,13 +105,11 @@ export const usePeggingStore = defineStore('pegging', () => {
     }
     if (pegging.opponent === 'out') {
       pegging.go[player] = true
-      console.log(player + ' is a go')
       resetPegging()
       return startTurn(pegging.turn)
     }
     pegging.opponent = 'go'
     pegging.go[player] = true
-    console.log(player + ' is a go')
     return switchTurns()
   }
 

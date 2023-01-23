@@ -13,6 +13,8 @@ gsap.registerPlugin(Flip)
 const { game } = useGameStore()
 const { pegging, playCard, getBotsCard, startTurn } = usePeggingStore()
 
+const botsFlippedCards = ref([])
+
 const activeCards = ref(null)
 const spentCards = ref(null)
 const userHand = ref(null)
@@ -47,6 +49,7 @@ const botsTurn = async () => {
   startTurn('bot')
   if (pegging.waitForBotCard) {
     let card = getBotsCard()
+    botsFlippedCards.value.push(card)
     playCard(card, 'bot')
     animateCardPlay(card, true)
   }
@@ -55,15 +58,6 @@ const botsTurn = async () => {
 watchEffect(() => {
   if (pegging.waitForBotCard) {
     botsTurn()
-  }
-})
-
-watchEffect(() => {
-  if (pegging.go.user) {
-    console.log('USER GO')
-  }
-  if (pegging.go.bot) {
-    console.log('BOT GO')
   }
 })
 
@@ -140,7 +134,7 @@ const animateCardPlay = (card, botsTurn) => {
         :card="card"
         :show-back="true"
         :key="card"
-        :flip="pegging.active.some((c) => objectsEqual(c, card))"
+        :flip="botsFlippedCards.some((c) => objectsEqual(c, card))"
         :class="'cursor-default'"
       />
     </div>
@@ -151,10 +145,10 @@ const animateCardPlay = (card, botsTurn) => {
       <div
         ref="peggingCount"
         style="box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.85)"
-        class="absolute left-4 flex-col top-10 z-10 px-3 py-2 border border-gray-600 rounded-md bg-gray-800 flex items-center space-x-2"
+        class="absolute z-10 flex flex-col items-center px-3 py-2 space-x-2 bg-gray-800 border border-gray-600 rounded-md left-4 top-10"
       >
-        <span class="font-light text-sm text-gray-300"> Pegging count: </span>
-        <span class="text-4xl font-medium pt-1 text-gray-100 tracking-tight">{{
+        <span class="text-sm font-light text-gray-300"> Pegging count: </span>
+        <span class="pt-1 text-4xl font-medium tracking-tight text-gray-100">{{
           pegging.count
         }}</span>
       </div>
@@ -169,11 +163,11 @@ const animateCardPlay = (card, botsTurn) => {
 
       <GoIndicator
         :show="pegging.go.bot"
-        class="-top-36 text-blue-400 border-blue-400 t-current:text-purple-400 t-current:border-purple-400 t-domino:text-black t-domino:border-black"
+        class="text-blue-400 border-blue-400 -top-36 t-current:text-purple-400 t-current:border-purple-400 t-domino:text-black t-domino:border-black"
       />
       <GoIndicator
         :show="pegging.go.user"
-        class="-bottom-36 text-red-400 border-red-400 t-current:text-green-400 t-domino:text-gray-100"
+        class="text-red-400 border-red-400 -bottom-36 t-current:text-green-400 t-domino:text-gray-100"
       />
 
       <div class="flex w-3/4">
@@ -188,7 +182,7 @@ const animateCardPlay = (card, botsTurn) => {
       </div>
     </div>
 
-    <div class="w-fit mx-auto relative">
+    <div class="relative mx-auto w-fit">
       <div
         ref="userHand"
         class="h-[175px] w-[410px] self-center flex justify-center -space-x-14"
