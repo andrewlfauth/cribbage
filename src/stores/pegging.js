@@ -48,6 +48,17 @@ export const usePeggingStore = defineStore('pegging', () => {
       (c) => !objectsEqual(c, card)
     )
 
+    if (!pegging[player].hand?.length) {
+      if (pegging.opponent == 'out') {
+        pegging.turnScore.push({ points: 1, message: '1 for last card' })
+        // End stage
+      } else {
+        pegging.opponent = 'out'
+      }
+    } else {
+      pegging.opponent = ''
+    }
+
     if (pegging.opponent == 'go' && turnIsAGo() && pegging.count != 31) {
       pegging.go[player] = true
       console.log(player + ' is a go')
@@ -62,16 +73,6 @@ export const usePeggingStore = defineStore('pegging', () => {
     if (pegging.count == 15) {
       pegging.turnScore.push({ points: 2, message: '2 for 15' })
       return switchTurns()
-    }
-    if (!pegging[player].hand?.length) {
-      if (pegging.opponent == 'out') {
-        pegging.turnScore.push({ points: 1, message: '1 for last card' })
-        // End stage
-      } else {
-        pegging.opponent = 'out'
-      }
-    } else {
-      pegging.opponent = ''
     }
     switchTurns()
   }
