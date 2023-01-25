@@ -10,14 +10,14 @@ export function getPairs(cards, cutCard) {
       }
     }
   }
-  return combinations.length ? combinations : false
+  return combinations
 }
 
 export function getFlush(cards, cutCard) {
   let suit = cards[0].suit
   for (let i = 0; i < cards.length; i++) {
     if (cards[i].suit != suit) {
-      return false
+      return []
     }
   }
   if (cutCard.suit == suit) return cards.concat(cutCard)
@@ -40,7 +40,7 @@ export function getRuns(cards, cutCard) {
     if (isARun(cards)) runs.push(cards)
   })
 
-  return runs.length ? runs : false
+  return runs
 }
 
 export function isARun(cards) {
@@ -65,5 +65,10 @@ export function getFifteens(cards, cutCard) {
     let total = cards.reduce((acc, cur) => (acc += cur.count), 0)
     if (total == 15) fifteens.push(cards)
   })
-  return fifteens.length ? fifteens : false
+  return fifteens
+}
+
+export function isNobs(cards, cutCard) {
+  if (cutCard.value == 'J') return []
+  return cards.filter((card) => card.value == 'J' && card.suit == cutCard.suit)
 }

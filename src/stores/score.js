@@ -1,7 +1,13 @@
 import { reactive } from 'vue'
 import { defineStore } from 'pinia'
 import { useGameStore } from '../stores/game'
-import { getFlush, getPairs, getFifteens, getRuns } from '../utils/scoring'
+import {
+  getFlush,
+  getPairs,
+  getFifteens,
+  getRuns,
+  isNobs,
+} from '../utils/scoring'
 
 export const useScoreStore = defineStore('score', () => {
   const { game } = useGameStore()
@@ -9,8 +15,20 @@ export const useScoreStore = defineStore('score', () => {
     user: 0,
     bot: 0,
     flashMessage: { messages: [], player: '' },
-    usersHand: {},
-    botsHand: {},
+    usersHand: {
+      fifteens: [],
+      pairs: [],
+      run: [],
+      flush: [],
+      nobs: [],
+    },
+    botsHand: {
+      fifteens: [],
+      pairs: [],
+      run: [],
+      flush: [],
+      nobs: [],
+    },
   })
 
   const awardPoints = (points, player) => {
@@ -30,6 +48,7 @@ export const useScoreStore = defineStore('score', () => {
       pairs: getPairs(game.usersHand, cutCard),
       runs: getRuns(game.usersHand, cutCard),
       flush: getFlush(game.usersHand, cutCard),
+      nobs: isNobs(game.usersHand, cutCard),
     }
 
     score.botsHand = {
@@ -37,6 +56,7 @@ export const useScoreStore = defineStore('score', () => {
       pairs: getPairs(game.botsHand, cutCard),
       runs: getRuns(game.botsHand, cutCard),
       flush: getFlush(game.botsHand, cutCard),
+      nobs: isNobs(game.usersHand, cutCard),
     }
   }
 
