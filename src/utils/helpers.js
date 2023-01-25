@@ -28,3 +28,39 @@ export function arrayIncludesObject(obj, array) {
 export function removeObjFromArray(obj, array) {
   return array.filter((item) => !objectsEqual(item, obj))
 }
+
+export function getSetsOfFour(items) {
+  const result = []
+  for (let i = 0; i < items.length - 3; i++) {
+    for (let j = i + 1; j < items.length - 2; j++) {
+      for (let k = j + 1; k < items.length - 1; k++) {
+        for (let l = k + 1; l < items.length; l++) {
+          result.push([items[i], items[j], items[k], items[l]])
+        }
+      }
+    }
+  }
+  return result
+}
+
+export function getSetsOfThree(items) {
+  const result = []
+  for (let i = 0; i < items.length - 2; i++) {
+    for (let j = i + 1; j < items.length - 1; j++) {
+      for (let k = j + 1; k < items.length; k++) {
+        result.push([items[i], items[j], items[k]])
+      }
+    }
+  }
+  return result
+}
+
+export function getSetsOfTwo(items) {
+  const result = []
+  for (let i = 0; i < items.length; i++) {
+    for (let j = i + 1; j < items.length; j++) {
+      result.push([items[i], items[j]])
+    }
+  }
+  return result
+}
