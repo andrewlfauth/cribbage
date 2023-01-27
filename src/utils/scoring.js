@@ -20,8 +20,8 @@ export function getFlush(cards, cutCard) {
       return []
     }
   }
-  if (cutCard.suit == suit) return cards.concat(cutCard)
-  else return cards
+  if (cutCard.suit == suit) return [cards.concat(cutCard)]
+  else return [[...cards]]
 }
 
 export function getRuns(cards, cutCard) {
