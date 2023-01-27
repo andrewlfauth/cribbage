@@ -15,16 +15,18 @@ export const useScoreStore = defineStore('score', () => {
     user: 0,
     bot: 0,
     flashMessage: { messages: [], player: '' },
+    usersHandTotal: 0,
+    botsHandTotal: 0,
     usersHand: {
-      fifteens: [],
-      pairs: [],
+      fifteen: [],
+      pair: [],
       run: [],
       flush: [],
       nobs: [],
     },
     botsHand: {
-      fifteens: [],
-      pairs: [],
+      fifteen: [],
+      pair: [],
       run: [],
       flush: [],
       nobs: [],
@@ -43,20 +45,49 @@ export const useScoreStore = defineStore('score', () => {
   const calculateScores = () => {
     let cutCard = game.deck[20]
 
+    let userFifteens = getFifteens(game.usersHand, cutCard)
+    let userPairs = getPairs(game.usersHand, cutCard)
+    let userRuns = getRuns(game.usersHand, cutCard)
+    let userFlush = getFlush(game.usersHand, cutCard)
+    let userNobs = isNobs(game.usersHand, cutCard)
+
+    let botFifteens = getFifteens(game.botsHand, cutCard)
+    let botPairs = getPairs(game.botsHand, cutCard)
+    let botRuns = getRuns(game.botsHand, cutCard)
+    let botFlush = getFlush(game.botsHand, cutCard)
+    let botNobs = isNobs(game.botsHand, cutCard)
+
+    let userTotal =
+      userFifteens.length * 2 +
+      userPairs.length * 2 +
+      userRuns.reduce((acc, cards) => (acc += cards.length), 0) +
+      userFlush.length +
+      userNobs.length
+
+    let botTotal =
+      botFifteens.length * 2 +
+      botPairs.length * 2 +
+      botRuns.reduce((acc, cards) => (acc += cards.length), 0) +
+      botFlush.length +
+      botNobs.length
+
+    score.usersHandTotal = userTotal
+    score.botsHandTotal = botTotal
+
     score.usersHand = {
-      fifteens: getFifteens(game.usersHand, cutCard),
-      pairs: getPairs(game.usersHand, cutCard),
-      runs: getRuns(game.usersHand, cutCard),
-      flush: getFlush(game.usersHand, cutCard),
-      nobs: isNobs(game.usersHand, cutCard),
+      fifteen: userFifteens,
+      pair: userPairs,
+      run: userRuns,
+      flush: userFlush,
+      nobs: userNobs,
     }
 
     score.botsHand = {
-      fifteens: getFifteens(game.botsHand, cutCard),
-      pairs: getPairs(game.botsHand, cutCard),
-      runs: getRuns(game.botsHand, cutCard),
-      flush: getFlush(game.botsHand, cutCard),
-      nobs: isNobs(game.usersHand, cutCard),
+      fifteen: botFifteens,
+      pair: botPairs,
+      run: botRuns,
+      flush: botFlush,
+      nobs: botNobs,
     }
   }
 

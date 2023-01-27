@@ -1,29 +1,126 @@
 <script setup>
-import { onMounted, reactive, ref } from 'vue'
+import { onMounted, ref, computed, onBeforeMount } from 'vue'
 import { useGameStore } from '../../stores/game'
+import { useScoreStore } from '../../stores/score'
 import Card from '../Card.vue'
 import Button from '../Button.vue'
+import HandTotal from './HandTotal.vue'
+import PointsPopup from './PointsPopup.vue'
 import { gsap } from 'gsap'
 
 const { game } = useGameStore()
+const { score, calculateScores } = useScoreStore()
 
 const animationTrigger = ref(null)
+const pointsPopup = ref(null)
+let tl = gsap.timeline()
 
-onMounted(() => {
-  gsap.from(animationTrigger.value, { opacity: 0.1 })
+let scoringTypes = Object.keys(score.usersHand)
+let currentScoringType = ref(scoringTypes[0])
+let popupPoints = ref(0)
+
+const showHandTotal = ref(false)
+let countedFirstHand = ref(false)
+
+let playerCounting = computed(() => {
+  if (countedFirstHand.value) return game.dealer
+  else return game.dealer == 'user' ? 'bot' : 'user'
 })
 
-const startAnimation = () => {
-  let tl = gsap.timeline()
-  tl.to(animationTrigger.value, { opacity: 0, duration: 0.2 })
+let currentScores = ref({
+  fifteens: 0,
+  pairs: 0,
+  runs: 0,
+  flush: 0,
+  nobs: 0,
+})
+
+onBeforeMount(() => calculateScores())
+
+onMounted(() => gsap.from(animationTrigger.value, { opacity: 0.1 }))
+
+const startCouting = () => {
+  tl.to(animationTrigger.value, {
+    opacity: 0,
+    pointerEvents: 'none',
+    duration: 0.2,
+  })
+  animateCount(game.dealer == 'user' ? score.botsHand : score.usersHand)
 }
 
-const ringStyles = reactive({
-  'ring-red-400 t-current:ring-green-400 t-domino:ring-gray-100':
-    game.dealer == 'bot',
-  'ring-blue-400 t-current:ring-purple-400 t-domino:ring-black':
-    game.dealer == 'user',
-})
+const acceptCount = () => {
+  showHandTotal.value = false
+  if (playerCounting.value == 'user') score.user += score.usersHandTotal
+  else score.bot += score.botsHandTotal
+  if (!countedFirstHand.value) {
+    countedFirstHand.value = true
+    Object.keys(currentScores.value).forEach(
+      (key) => (currentScores.value[key] = 0)
+    )
+
+    animateCount(game.dealer == 'user' ? score.usersHand : score.botsHand)
+  }
+}
+
+const getCardElementsThatScored = (hand) =>
+  scoringTypes.reduce(
+    (acc, type) => ({
+      ...acc,
+      [type]: hand[type].map((cards) =>
+        cards.map((card) =>
+          document.querySelector(`[data-card='${JSON.stringify(card)}'`)
+        )
+      ),
+    }),
+    {}
+  )
+
+const animateCount = (hand) => {
+  let els = getCardElementsThatScored(hand)
+
+  scoringTypes.forEach((type) => {
+    tl.call(() => (currentScoringType.value = type))
+    els[type].forEach((cards) => {
+      tl.call(() => {
+        let pointsAdded = incrementPoints(type, cards)
+        popupPoints.value = pointsAdded
+      })
+      raiseCards(cards)
+    })
+  })
+  tl.call(() => (showHandTotal.value = true))
+}
+
+const raiseCards = (cards) => {
+  tl.to(cards, { y: -10, duration: 0.3 })
+  tl.to(cards, { y: 0, duration: 0.3 })
+  tl.to(pointsPopup.value, { opacity: 1, scale: 1 }, '-=.4')
+  tl.to(
+    pointsPopup.value,
+    { opacity: 0, scale: 0.97, duration: 0.1, ease: 'power1.out' },
+    '+=.2'
+  )
+}
+
+const incrementPoints = (type, cards) => {
+  switch (type) {
+    case 'fifteen':
+      currentScores.value.fifteens += 2
+      return 2
+    case 'pair':
+      currentScores.value.pairs += 2
+      return 2
+    case 'run':
+      currentScores.value.runs += cards.length
+      return cards.length
+    case 'flush':
+      currentScores.value.flush += cards.length
+      return cards.length
+    case 'nobs':
+      currentScores.value.nobs++
+      return 1
+  }
+}
 </script>
 
 <template>
@@ -54,9 +151,8 @@ const ringStyles = reactive({
         :class="'cursor-default'"
       />
     </div>
-
-    <div class="flex h-[175px] relative items-center">
-      <div class="absolute left-0 top-0">
+    <div class="flex h-[175px] relative items-center justify-center">
+      <div class="absolute top-0 left-0">
         <Card
           :card="game.deck[19]"
           class="absolute cursor-default"
@@ -66,16 +162,36 @@ const ringStyles = reactive({
       </div>
       <div
         ref="animationTrigger"
-        class="mx-auto flex flex-col items-center space-y-6"
+        class="absolute left-0 right-0 flex flex-col items-center mx-auto space-y-6"
       >
         <p class="text-3xl text-gray-400">
           <span>{{ game.dealer == 'user' ? 'Bot' : 'You' }}</span>
           {{ game.dealer == 'user' ? 'counts first' : 'count first' }}
         </p>
-        <Button @click="startAnimation" :text="'Okay'" :class="ringStyles" />
+        <Button @click="startCouting" :text="'Okay'" />
       </div>
+      <div
+        ref="pointsPopup"
+        class="flex items-center px-4 py-4 rounded-md opacity-0 pointer-events-none"
+        :class="playerCounting == 'user' ? 'mt-44' : '-mt-44'"
+      >
+        <PointsPopup
+          :scoringType="currentScoringType"
+          :points="popupPoints"
+          :player-counting="playerCounting"
+        />
+      </div>
+      <HandTotal
+        v-if="showHandTotal"
+        :player="playerCounting"
+        :total="
+          playerCounting == 'user' ? score.usersHandTotal : score.botsHandTotal
+        "
+        :scores="playerCounting == 'user' ? score.usersHand : score.botsHand"
+        :points="currentScores"
+        @clicked="acceptCount"
+      />
     </div>
-
     <div class="relative mx-auto w-fit">
       <div
         ref="userHand"
