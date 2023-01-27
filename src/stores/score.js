@@ -31,6 +31,13 @@ export const useScoreStore = defineStore('score', () => {
       flush: [],
       nobs: [],
     },
+    crib: {
+      fifteen: [],
+      pair: [],
+      run: [],
+      flush: [],
+      nobs: [],
+    },
   })
 
   const awardPoints = (points, player) => {
@@ -42,7 +49,7 @@ export const useScoreStore = defineStore('score', () => {
     score.flashMessage = { messages, player }
   }
 
-  const calculateScores = () => {
+  const calculateHandScores = () => {
     let cutCard = game.deck[20]
 
     let userFifteens = getFifteens(game.usersHand, cutCard)
@@ -91,5 +98,21 @@ export const useScoreStore = defineStore('score', () => {
     }
   }
 
-  return { score, awardPoints, calculateScores }
+  const calculateCribScores = () => {
+    let cutCard = game.deck[20]
+
+    let fifteens = getFifteens(game.crib, cutCard)
+    let pairs = getPairs(game.crib, cutCard)
+    let runs = getRuns(game.crib, cutCard)
+    let flush = getFlush(game.crib, cutCard)
+    let nobs = isNobs(game.crib, cutCard)
+
+    score.crib.fifteen = fifteens
+    score.crib.pair = pairs
+    score.crib.run = runs
+    score.crib.flush = flush
+    score.crib.nobs = nobs
+  }
+
+  return { score, awardPoints, calculateHandScores, calculateCribScores }
 })
