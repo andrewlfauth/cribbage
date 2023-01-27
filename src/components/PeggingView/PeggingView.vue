@@ -15,6 +15,7 @@ const { pegging, playCard, getBotsCard, startTurn } = usePeggingStore()
 
 const botsFlippedCards = ref([])
 const cardsPlayed = ref(0)
+const showMessage = ref(pegging.turn == 'user')
 
 const activeCards = ref(null)
 const spentCards = ref(null)
@@ -36,6 +37,16 @@ onMounted(() => {
     ease: 'elastic.out(.4, 0.5)',
     duration: 0.7,
   })
+})
+
+watchEffect(() => {
+  let id
+  if (pegging.turn == 'user' && cardsPlayed.value !== 8) {
+    id = setTimeout(() => (showMessage.value = true), 500)
+  } else {
+    clearTimeout(id)
+    showMessage.value = false
+  }
 })
 
 const selectCard = (card) => {
@@ -206,6 +217,12 @@ watchEffect(() => {
         />
         <Card :card="game.deck[20]" class="absolute cursor-default" />
       </div>
+      <span
+        v-if="showMessage"
+        class="absolute w-fit left-0 right-0 mx-auto -bottom-10 text-gray-400"
+      >
+        Select a card to play
+      </span>
 
       <GoIndicator
         :show="pegging.go.bot"
