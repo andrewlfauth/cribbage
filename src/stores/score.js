@@ -6,17 +6,20 @@ import {
   getPairs,
   getFifteens,
   getRuns,
-  isNobs,
+  getNobs,
 } from '../utils/scoring'
 
 export const useScoreStore = defineStore('score', () => {
   const { game } = useGameStore()
+  let scoringTypes = ['fifteen', 'pair', 'run', 'flush', 'nobs']
+
   const score = reactive({
     user: 0,
     bot: 0,
     flashMessage: { messages: [], player: '' },
     usersHandTotal: 0,
     botsHandTotal: 0,
+    cribTotal: 0,
     usersHand: {
       fifteen: [],
       pair: [],
@@ -56,30 +59,31 @@ export const useScoreStore = defineStore('score', () => {
     let userPairs = getPairs(game.usersHand, cutCard)
     let userRuns = getRuns(game.usersHand, cutCard)
     let userFlush = getFlush(game.usersHand, cutCard)
-    let userNobs = isNobs(game.usersHand, cutCard)
+    let userNobs = getNobs(game.usersHand, cutCard)
 
     let botFifteens = getFifteens(game.botsHand, cutCard)
     let botPairs = getPairs(game.botsHand, cutCard)
     let botRuns = getRuns(game.botsHand, cutCard)
     let botFlush = getFlush(game.botsHand, cutCard)
-    let botNobs = isNobs(game.botsHand, cutCard)
+    let botNobs = getNobs(game.botsHand, cutCard)
 
     let userTotal =
       userFifteens.length * 2 +
       userPairs.length * 2 +
       userRuns.reduce((acc, cards) => (acc += cards.length), 0) +
-      userFlush.length +
-      userNobs.length
+      userFlush[0]?.length
+
+    if (userNobs.length == 2) userTotal++
+    score.userTotal = userTotal
 
     let botTotal =
       botFifteens.length * 2 +
       botPairs.length * 2 +
       botRuns.reduce((acc, cards) => (acc += cards.length), 0) +
-      botFlush.length +
-      botNobs.length
+      botFlush[0]?.length
 
-    score.usersHandTotal = userTotal
-    score.botsHandTotal = botTotal
+    if (botNobs.length == 2) botTotal++
+    score.botTotal = botTotal
 
     score.usersHand = {
       fifteen: userFifteens,
@@ -105,14 +109,42 @@ export const useScoreStore = defineStore('score', () => {
     let pairs = getPairs(game.crib, cutCard)
     let runs = getRuns(game.crib, cutCard)
     let flush = getFlush(game.crib, cutCard)
-    let nobs = isNobs(game.crib, cutCard)
+    let nobs = getNobs(game.crib, cutCard)
 
     score.crib.fifteen = fifteens
     score.crib.pair = pairs
     score.crib.run = runs
     score.crib.flush = flush
     score.crib.nobs = nobs
+
+    let total =
+      fifteens.length * 2 +
+      pairs.length * 2 +
+      runs.reduce((acc, cards) => (acc += cards.length), 0) +
+      flush[0].length
+
+    if (nobs.length == 2) cribTotal++
+    score.cribTotal = total
   }
 
-  return { score, awardPoints, calculateHandScores, calculateCribScores }
+  const getCardElementsThatScored = (hand) =>
+    scoringTypes.reduce(
+      (acc, type) => ({
+        ...acc,
+        [type]: hand[type].map((cards) =>
+          cards.map((card) =>
+            document.querySelector(`[data-card='${JSON.stringify(card)}'`)
+          )
+        ),
+      }),
+      {}
+    )
+
+  return {
+    score,
+    awardPoints,
+    calculateHandScores,
+    calculateCribScores,
+    getCardElementsThatScored,
+  }
 })
