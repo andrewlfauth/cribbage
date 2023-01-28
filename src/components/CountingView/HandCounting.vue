@@ -9,7 +9,8 @@ import PointsPopup from './PointsPopup.vue'
 import { gsap } from 'gsap'
 
 const { game } = useGameStore()
-const { score, calculateHandScores } = useScoreStore()
+const { score, calculateHandScores, getCardElementsThatScored } =
+  useScoreStore()
 
 const emit = defineEmits(['done-counting'])
 
@@ -61,7 +62,7 @@ onBeforeMount(() => calculateHandScores())
 
 onMounted(() => gsap.from(animationTrigger.value, { opacity: 0.1 }))
 
-const startCouting = () => {
+const countFirstHand = () => {
   tl.to(animationTrigger.value, {
     opacity: 0,
     pointerEvents: 'none',
@@ -83,19 +84,6 @@ const acceptCount = () => {
     animateCount(game.dealer == 'user' ? score.usersHand : score.botsHand)
   } else emit('done-counting')
 }
-
-const getCardElementsThatScored = (hand) =>
-  scoringTypes.reduce(
-    (acc, type) => ({
-      ...acc,
-      [type]: hand[type].map((cards) =>
-        cards.map((card) =>
-          document.querySelector(`[data-card='${JSON.stringify(card)}'`)
-        )
-      ),
-    }),
-    {}
-  )
 
 const animateCount = (hand) => {
   let els = getCardElementsThatScored(hand)
@@ -190,11 +178,11 @@ const incrementPoints = (type, cards) => {
           <span>{{ game.dealer == 'user' ? 'Bot' : 'You' }}</span>
           {{ game.dealer == 'user' ? 'counts first' : 'count first' }}
         </p>
-        <Button @click="startCouting" :text="'Okay'" />
+        <Button @click="countFirstHand" :text="'Okay'" />
       </div>
       <div
         ref="pointsPopup"
-        class="flex items-center px-4 py-4 rounded-md opacity-0 pointer-events-none"
+        class="flex items-center opacity-0 pointer-events-none"
         :class="playerCounting == 'user' ? 'mt-44' : '-mt-44'"
       >
         <PointsPopup

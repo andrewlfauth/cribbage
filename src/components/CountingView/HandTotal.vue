@@ -7,6 +7,7 @@ const props = defineProps({
   total: Number,
   scores: Object,
   points: Object,
+  isCrib: Boolean,
 })
 const emit = defineEmits(['clicked'])
 
@@ -30,10 +31,18 @@ const buttonClass = reactive({
 <template>
   <div
     style="box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75)"
-    class="absolute flex flex-col items-center px-4 py-2 text-gray-300 bg-gray-800 border-2 border-gray-700 rounded-md"
+    class="absolute flex flex-col items-center px-4 py-2 text-gray-300 bg-gray-800 border-2 border-gray-700 rounded-md w-44"
   >
     <h3 class="text-lg tracking-tight">
-      {{ props.player == 'user' ? 'Your hand total' : "Bot's hand total" }}
+      {{
+        props.isCrib
+          ? props.player == 'user'
+            ? 'Your Crib Total'
+            : "Bot's Crib Total"
+          : props.player == 'user'
+          ? 'Your hand total'
+          : "Bot's hand total"
+      }}
     </h3>
     <span class="mt-2 mb-4 text-6xl" :class="textColorClass">{{
       props.total
@@ -46,7 +55,7 @@ const buttonClass = reactive({
     />
     <div v-for="key in keys" class="mb-1 text-sm tracking-tight">
       <span
-        >{{ key != 'nobs' ? props.scores[key].length : '' }}
+        >{{ props.scores[key].length != 1 ? props.scores[key].length : '' }}
         {{ props.scores[key].length == 1 ? key : key + 's' }} for
       </span>
       <span :class="textColorClass" class="text-base font-medium">{{

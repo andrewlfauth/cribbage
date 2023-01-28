@@ -7,10 +7,15 @@ import { wait } from '../../utils/helpers'
 import { useScoreStore } from '../../stores/score'
 import { useGameStore } from '../../stores/game'
 import PointsPopup from './PointsPopup.vue'
+import HandTotal from './HandTotal.vue'
 
 gsap.registerPlugin(Flip)
+let tl = gsap.timeline()
 
-const { calculateCribScores } = useScoreStore()
+const emit = defineEmits(['done-counting'])
+
+const { score, calculateCribScores, getCardElementsThatScored } =
+  useScoreStore()
 const { game } = useGameStore()
 game.dealer = 'bot'
 game.botsHand = [
@@ -34,6 +39,10 @@ game.crib = [
 
 const flipHands = ref(false)
 const flipCrib = ref(false)
+const flipCutCard = ref(false)
+const showHandTotal = ref(false)
+const scoringTypes = Object.keys(score.crib)
+const currentScoringType = ref(scoringTypes[0])
 let state
 
 const botHand = ref(null)
@@ -42,6 +51,15 @@ const deck = ref(null)
 const crib = ref(null)
 const pointsPopup = ref(null)
 
+let popupPoints = ref(0)
+let currentScores = ref({
+  fifteens: 0,
+  pairs: 0,
+  runs: 0,
+  flush: 0,
+  nobs: 0,
+})
+
 onBeforeMount(() => calculateCribScores())
 
 onMounted(async () => {
@@ -49,6 +67,8 @@ onMounted(async () => {
   animateCribCardsIn()
   await wait(2)
   flipCrib.value = true
+  await wait(1)
+  animateCount()
 })
 
 const animateCountedHandsOut = () => {
@@ -86,6 +106,83 @@ const animateCribCardsIn = () => {
     ease: 'power1.inOut',
     delay: 2,
   })
+}
+
+const animateCount = () => {
+  let els = getCardElementsThatScored(score.crib)
+
+  scoringTypes.forEach((type) => {
+    tl.call(() => (currentScoringType.value = type))
+    els[type].forEach((cards) => {
+      tl.call(() => {
+        let pointsAdded = incrementPoints(type, cards)
+        popupPoints.value = pointsAdded
+      })
+      raiseCards(cards)
+    })
+  })
+  tl.call(() => (showHandTotal.value = true))
+}
+
+const animateOut = async () => {
+  if (game.dealer == 'user') score.user += score.cribTotal
+  else score.bot += score.cribTotal
+
+  showHandTotal.value = false
+  flipCrib.value = false
+
+  let cribCards =
+    game.dealer == 'user'
+      ? [...userHand.value.children]
+      : [...botHand.value.children]
+  let state = Flip.getState(cribCards)
+
+  cribCards.reverse().forEach((card) => {
+    deck.value.prepend(card)
+    card.style.position = 'absolute'
+  })
+
+  Flip.from(state, {
+    duration: 0.7,
+    ease: 'power1.inOut',
+    stagger: 0.1,
+  })
+
+  await wait(1)
+  flipCutCard.value = true
+  await wait(1)
+  emit('done-counting')
+}
+
+const raiseCards = (cards) => {
+  tl.to(cards, { y: -10, duration: 0.3 })
+  tl.to(cards, { y: 0, duration: 0.3 })
+  tl.to(pointsPopup.value, { opacity: 1, scale: 1 }, '-=.4')
+  tl.to(
+    pointsPopup.value,
+    { opacity: 0, scale: 0.97, duration: 0.1, ease: 'power1.out' },
+    '+=.2'
+  )
+}
+
+const incrementPoints = (type, cards) => {
+  switch (type) {
+    case 'fifteen':
+      currentScores.value.fifteens += 2
+      return 2
+    case 'pair':
+      currentScores.value.pairs += 2
+      return 2
+    case 'run':
+      currentScores.value.runs += cards.length
+      return cards.length
+    case 'flush':
+      currentScores.value.flush += cards.length
+      return cards.length
+    case 'nobs':
+      currentScores.value.nobs++
+      return 1
+  }
 }
 </script>
 
@@ -128,11 +225,32 @@ const animateCribCardsIn = () => {
           class="absolute cursor-default"
           :show-back="true"
         />
-        <Card :card="game.deck[20]" class="absolute cursor-default" />
+        <Card
+          :card="game.deck[20]"
+          class="absolute cursor-default"
+          :flip="flipCutCard"
+        />
       </div>
-      <!-- <div ref="pointsPopup">
-        <PointsPopup :player-counting="game.dealer" />
-      </div> -->
+      <div
+        ref="pointsPopup"
+        class="flex items-center opacity-0 pointer-events-none"
+        :class="game.dealer == 'user' ? 'mt-44' : '-mt-44'"
+      >
+        <PointsPopup
+          :player-counting="game.dealer"
+          :scoring-type="currentScoringType"
+          :points="popupPoints"
+        />
+      </div>
+      <HandTotal
+        v-if="showHandTotal"
+        :player="game.dealer"
+        :total="score.cribTotal"
+        :scores="score.crib"
+        :points="currentScores"
+        :is-crib="true"
+        @clicked="animateOut"
+      />
     </div>
 
     <div class="relative mx-auto w-fit">

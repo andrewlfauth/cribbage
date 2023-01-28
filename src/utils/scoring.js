@@ -73,6 +73,6 @@ export function getNobs(cards, cutCard) {
   let nobs = cards.filter(
     (card) => card.value == 'J' && card.suit == cutCard.suit
   )
-  if (nobs.length) return [[nobs, cutCard]]
+  if (nobs.length) return [[...nobs, cutCard]]
   else return []
 }

@@ -70,20 +70,20 @@ export const useScoreStore = defineStore('score', () => {
     let userTotal =
       userFifteens.length * 2 +
       userPairs.length * 2 +
-      userRuns.reduce((acc, cards) => (acc += cards.length), 0) +
-      userFlush[0]?.length
+      userRuns.reduce((acc, cards) => (acc += cards.length), 0)
 
+    if (userFlush.length) userTotal += userFlush[0].length
     if (userNobs.length == 2) userTotal++
-    score.userTotal = userTotal
+    score.usersHandTotal = userTotal
 
     let botTotal =
       botFifteens.length * 2 +
       botPairs.length * 2 +
-      botRuns.reduce((acc, cards) => (acc += cards.length), 0) +
-      botFlush[0]?.length
+      botRuns.reduce((acc, cards) => (acc += cards.length), 0)
 
+    if (botFlush.length) botTotal += botFlush[0].length
     if (botNobs.length == 2) botTotal++
-    score.botTotal = botTotal
+    score.botsHandTotal = botTotal
 
     score.usersHand = {
       fifteen: userFifteens,
