@@ -17,25 +17,6 @@ const emit = defineEmits(['done-counting'])
 const { score, calculateCribScores, getCardElementsThatScored } =
   useScoreStore()
 const { game } = useGameStore()
-game.dealer = 'bot'
-game.botsHand = [
-  { suit: '♣', value: '8', order: 8, count: 8 },
-  { suit: '♥', value: 'Q', order: 12, count: 10 },
-  { suit: '♠', value: 'Q', order: 12, count: 10 },
-  { suit: '♦', value: 'Q', order: 12, count: 10 },
-]
-game.usersHand = [
-  { suit: '♦', value: '2', order: 2, count: 2 },
-  { suit: '♥', value: '6', order: 6, count: 6 },
-  { suit: '♠', value: 'K', order: 13, count: 10 },
-  { suit: '♥', value: 'K', order: 13, count: 10 },
-]
-game.crib = [
-  { suit: '♠', value: '3', order: 3, count: 3 },
-  { suit: '♠', value: '6', order: 6, count: 6 },
-  { suit: '♠', value: 'J', order: 11, count: 10 },
-  { suit: '♠', value: '4', order: 4, count: 4 },
-]
 
 const flipHands = ref(false)
 const flipCrib = ref(false)
@@ -95,9 +76,13 @@ const animateCountedHandsOut = () => {
 const animateCribCardsIn = () => {
   let cards = [...crib.value.children]
   state = Flip.getState(cards)
+  let moveCard = (card) =>
+    game.dealer == 'user'
+      ? userHand.value.appendChild(card)
+      : botHand.value.appendChild(card)
 
   cards.forEach((card) => {
-    botHand.value.appendChild(card)
+    moveCard(card)
     card.classList.remove('absolute')
   })
 

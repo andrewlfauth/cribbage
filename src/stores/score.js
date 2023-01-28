@@ -13,7 +13,7 @@ export const useScoreStore = defineStore('score', () => {
   const { game } = useGameStore()
   let scoringTypes = ['fifteen', 'pair', 'run', 'flush', 'nobs']
 
-  const score = reactive({
+  const initalState = {
     user: 0,
     bot: 0,
     flashMessage: { messages: [], player: '' },
@@ -41,7 +41,9 @@ export const useScoreStore = defineStore('score', () => {
       flush: [],
       nobs: [],
     },
-  })
+  }
+
+  const score = reactive({ ...initalState })
 
   const awardPoints = (points, player) => {
     if (!points.length) return
@@ -120,9 +122,9 @@ export const useScoreStore = defineStore('score', () => {
     let total =
       fifteens.length * 2 +
       pairs.length * 2 +
-      runs.reduce((acc, cards) => (acc += cards.length), 0) +
-      flush[0].length
+      runs.reduce((acc, cards) => (acc += cards.length), 0)
 
+    if (flush.length) total += flush[0].length
     if (nobs.length == 2) cribTotal++
     score.cribTotal = total
   }
@@ -140,11 +142,18 @@ export const useScoreStore = defineStore('score', () => {
       {}
     )
 
+  const resetHandScores = () => {
+    let user = score.user
+    let bot = score.bot
+    Object.assign(score, { ...initalState, user, bot })
+  }
+
   return {
     score,
     awardPoints,
     calculateHandScores,
     calculateCribScores,
     getCardElementsThatScored,
+    resetHandScores,
   }
 })

@@ -18,12 +18,22 @@ export const useGameStore = defineStore('game', () => {
     if (player == 'user') game.usersHand.push(card)
     else game.botsHand.push(card)
   }
+  const startNewHand = () => {
+    if (game.dealer == 'user') game.dealer = 'bot'
+    else game.dealer = 'user'
+    game.deck = shuffle(newDeck())
+    game.usersHand = []
+    game.botsHand = []
+    game.crib = []
+    changeStage('deal')
+  }
 
   return {
     game,
     changeStage,
     setDealer,
     addCardToHand,
+    startNewHand,
   }
 })
 

@@ -14,26 +14,6 @@ const { score, calculateHandScores, getCardElementsThatScored } =
 
 const emit = defineEmits(['done-counting'])
 
-game.dealer = 'bot'
-game.botsHand = [
-  { suit: '♣', value: '8', order: 8, count: 8 },
-  { suit: '♥', value: 'Q', order: 12, count: 10 },
-  { suit: '♠', value: 'Q', order: 12, count: 10 },
-  { suit: '♦', value: 'Q', order: 12, count: 10 },
-]
-game.usersHand = [
-  { suit: '♦', value: '2', order: 2, count: 2 },
-  { suit: '♥', value: '6', order: 6, count: 6 },
-  { suit: '♠', value: 'K', order: 13, count: 10 },
-  { suit: '♥', value: 'K', order: 13, count: 10 },
-]
-game.crib = [
-  { suit: '♠', value: '3', order: 3, count: 3 },
-  { suit: '♠', value: '6', order: 6, count: 6 },
-  { suit: '♠', value: 'J', order: 11, count: 10 },
-  { suit: '♠', value: '4', order: 4, count: 4 },
-]
-
 const animationTrigger = ref(null)
 const pointsPopup = ref(null)
 

@@ -7,8 +7,7 @@ import { objectsEqual, wait } from '../utils/helpers'
 export const usePeggingStore = defineStore('pegging', () => {
   const { game } = useGameStore()
   const { awardPoints } = useScoreStore()
-
-  const pegging = reactive({
+  const initialState = {
     active: [],
     spent: [],
     count: 0,
@@ -20,7 +19,9 @@ export const usePeggingStore = defineStore('pegging', () => {
     waitForUserCard: false,
     waitForBotCard: false,
     turnScore: [],
-  })
+  }
+
+  const pegging = reactive({ ...initialState })
 
   const startTurn = (player) => {
     if (!pegging.bot.hand?.length && !pegging.user.hand?.length) {
@@ -212,5 +213,11 @@ export const usePeggingStore = defineStore('pegging', () => {
     }
   }
 
-  return { pegging, playCard, getBotsCard, startTurn }
+  const setupPegging = () => {
+    Object.assign(pegging, initialState)
+    pegging.user.hand = game.usersHand
+    pegging.bot.hand = game.botsHand
+  }
+
+  return { pegging, playCard, getBotsCard, startTurn, setupPegging }
 })

@@ -11,7 +11,8 @@ import GoIndicator from './GoIndicator.vue'
 gsap.registerPlugin(Flip)
 
 const { game, changeStage } = useGameStore()
-const { pegging, playCard, getBotsCard, startTurn } = usePeggingStore()
+const { pegging, playCard, getBotsCard, startTurn, setupPegging } =
+  usePeggingStore()
 
 const botsFlippedCards = ref([])
 const cardsPlayed = ref(0)
@@ -26,6 +27,7 @@ const peggingCount = ref(null)
 let state
 
 onMounted(() => {
+  setupPegging()
   if (pegging.dealer == 'user') {
     startTurn('bot')
   } else {
@@ -219,7 +221,7 @@ watchEffect(() => {
       </div>
       <span
         v-if="showMessage"
-        class="absolute w-fit left-0 right-0 mx-auto -bottom-10 text-gray-400"
+        class="absolute left-0 right-0 mx-auto text-gray-400 w-fit -bottom-10"
       >
         Select a card to play
       </span>
