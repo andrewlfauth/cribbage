@@ -20,7 +20,7 @@ export function getFlush(cards, cutCard) {
       return []
     }
   }
-  if (cutCard.suit == suit) return [cards.concat(cutCard)]
+  if (cutCard.suit == suit) return [[...cards, cutCard]]
   else return [[...cards]]
 }
 
@@ -68,7 +68,11 @@ export function getFifteens(cards, cutCard) {
   return fifteens
 }
 
-export function isNobs(cards, cutCard) {
+export function getNobs(cards, cutCard) {
   if (cutCard.value == 'J') return []
-  return cards.filter((card) => card.value == 'J' && card.suit == cutCard.suit)
+  let nobs = cards.filter(
+    (card) => card.value == 'J' && card.suit == cutCard.suit
+  )
+  if (nobs.length) return [[nobs, cutCard]]
+  else return []
 }
