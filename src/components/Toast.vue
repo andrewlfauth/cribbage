@@ -7,6 +7,7 @@ const { score } = useScoreStore()
 const toast = ref(null)
 
 onUpdated(() => {
+  if (!score.flashMessage.messages?.length) return
   let tl = gsap.timeline()
   tl.to(toast.value, { opacity: 1, y: -130, duration: 0.3 })
   tl.to(toast.value, { opacity: 0, y: 0, duration: 0 }, '+=1.5')
