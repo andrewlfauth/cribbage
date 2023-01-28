@@ -46,11 +46,13 @@ const buttonClass = reactive({
     />
     <div v-for="key in keys" class="mb-1 text-sm tracking-tight">
       <span
-        >{{ props.scores[key].length }}
+        >{{ key != 'nobs' ? props.scores[key].length : '' }}
         {{ props.scores[key].length == 1 ? key : key + 's' }} for
       </span>
       <span :class="textColorClass" class="text-base font-medium">{{
-        props.points[key + 's']
+        key != 'flush' && key != 'nobs'
+          ? props.points[key + 's']
+          : props.points[key]
       }}</span>
       <span class="text-[11px]" :class="textColorClass">pts</span>
     </div>
