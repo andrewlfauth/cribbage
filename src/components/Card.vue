@@ -1,7 +1,7 @@
 <script setup>
 import { useThemeStore } from '../stores/theme'
 import { gsap } from 'gsap'
-import { ref, watchEffect } from 'vue'
+import { ref, watchEffect, onMounted } from 'vue'
 
 const { theme } = useThemeStore()
 
@@ -14,8 +14,11 @@ const props = defineProps({
 
 const emit = defineEmits(['clicked'])
 
+const rendered = ref(false)
 const contentRef = ref(null)
 const flipped = ref(false)
+
+onMounted(() => (rendered.value = true))
 
 const flipCard = () => {
   if (!flipped.value) {
@@ -33,6 +36,7 @@ const flipCard = () => {
 
 watchEffect(() => {
   if (props.flip) flipCard()
+  if (!props.flip && flipped.value) flipCard()
 })
 
 const TEXT_CLASS =
