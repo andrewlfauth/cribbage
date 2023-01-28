@@ -48,16 +48,16 @@ const themeBack = `background-image: url('${theme.card}');`
 <template>
   <div
     v-bind:data-card="JSON.stringify(props.card)"
-    class="card cursor-pointer"
+    class="cursor-pointer card"
     @click="$emit('clicked', props.card)"
   >
     <div
       ref="contentRef"
-      class="border border-neutral-900 rounded-md duration-150 content"
+      class="duration-150 border rounded-md border-neutral-900 content"
     >
       <div
         :class="{ front: !props.showBack, back: props.showBack }"
-        class="flex items-center justify-center rounded-md bg-gray-200"
+        class="flex items-center justify-center bg-gray-200 rounded-md"
       >
         <span
           :class="TEXT_CLASS"
@@ -89,7 +89,7 @@ const themeBack = `background-image: url('${theme.card}');`
         <div class="w-full h-full border-2 border-gray-200 rounded-md">
           <div
             :style="props.bg ? customBack : themeBack"
-            class="w-full h-full bg-gray-200 bg-center bg-cover rounded-md border border-neutral-800"
+            class="w-full h-full bg-gray-200 bg-center bg-cover border rounded-md border-neutral-800"
           ></div>
         </div>
       </div>

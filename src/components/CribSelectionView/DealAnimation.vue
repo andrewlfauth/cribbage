@@ -15,7 +15,7 @@ const emit = defineEmits(['cards-dealt'])
 const deck = ref(null)
 const usersHandEl = ref(null)
 const botsHandEl = ref(null)
-const dealtCard = ref()
+const dealtCards = ref([])
 
 onMounted(async () => {
   let cards = [...deck.value.children]
@@ -74,7 +74,7 @@ async function dealCard(card, player, i) {
   })
   if (player == 'user') {
     await wait((i + 0.1) / 10)
-    dealtCard.value = cardObj
+    dealtCards.value.push(cardObj)
   }
 }
 </script>
@@ -91,7 +91,7 @@ async function dealCard(card, player, i) {
         :key="card"
         v-bind:data-card="JSON.stringify(card)"
         v-bind:data-order="card.order"
-        :flip="objectsEqual(dealtCard, card)"
+        :flip="dealtCards.some((c) => objectsEqual(c, card))"
         :card="card"
         :show-back="true"
         class="absolute"
