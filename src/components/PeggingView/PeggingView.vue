@@ -3,7 +3,7 @@ import Card from '../Card.vue'
 import { useGameStore } from '../../stores/game'
 import { usePeggingStore } from '../../stores/pegging'
 import { objectsEqual, wait } from '../../utils/helpers'
-import { ref, onMounted, watchEffect } from 'vue'
+import { ref, onMounted, watchEffect, onBeforeMount } from 'vue'
 import { gsap } from 'gsap'
 import Flip from 'gsap/Flip'
 import GoIndicator from './GoIndicator.vue'
@@ -28,7 +28,7 @@ let state
 
 onMounted(() => {
   setupPegging()
-  if (pegging.dealer == 'user') {
+  if (game.dealer == 'user') {
     startTurn('bot')
   } else {
     startTurn('user')
@@ -232,7 +232,7 @@ watchEffect(() => {
       />
       <GoIndicator
         :show="pegging.go.user"
-        class="text-red-400 border-red-400 -bottom-36 t-current:text-green-400 t-domino:text-gray-100"
+        class="text-red-400 border-red-400 -bottom-36 t-current:text-green-400 t-current:border-green-400 t-domino:text-gray-100 t-domino:border-gray-100"
       />
 
       <div class="flex w-3/4">

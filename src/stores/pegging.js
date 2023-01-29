@@ -217,6 +217,9 @@ export const usePeggingStore = defineStore('pegging', () => {
     Object.assign(pegging, initialState)
     pegging.user.hand = game.usersHand
     pegging.bot.hand = game.botsHand
+    pegging.go = { user: false, bot: false }
+    pegging.active = []
+    game.dealer == 'user' ? (pegging.turn = 'bot') : (pegging.turn = 'user')
   }
 
   return { pegging, playCard, getBotsCard, startTurn, setupPegging }
