@@ -75,7 +75,7 @@ export const useScoreStore = defineStore('score', () => {
       userRuns.reduce((acc, cards) => (acc += cards.length), 0)
 
     if (userFlush.length) userTotal += userFlush[0].length
-    if (userNobs.length == 2) userTotal++
+    if (userNobs.length) userTotal++
     score.usersHandTotal = userTotal
 
     let botTotal =
@@ -84,7 +84,7 @@ export const useScoreStore = defineStore('score', () => {
       botRuns.reduce((acc, cards) => (acc += cards.length), 0)
 
     if (botFlush.length) botTotal += botFlush[0].length
-    if (botNobs.length == 2) botTotal++
+    if (botNobs.length) botTotal++
     score.botsHandTotal = botTotal
 
     score.usersHand = {
@@ -125,7 +125,7 @@ export const useScoreStore = defineStore('score', () => {
       runs.reduce((acc, cards) => (acc += cards.length), 0)
 
     if (flush.length) total += flush[0].length
-    if (nobs.length == 2) cribTotal++
+    if (nobs.length) cribTotal++
     score.cribTotal = total
   }
 

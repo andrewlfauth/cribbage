@@ -49,7 +49,8 @@ onMounted(async () => {
   await wait(2)
   flipCrib.value = true
   await wait(1)
-  animateCount()
+  if (!score.cribTotal) showHandTotal.value = true
+  else animateCount()
 })
 
 const animateCountedHandsOut = () => {
@@ -211,7 +212,7 @@ const incrementPoints = (type, cards) => {
           :show-back="true"
         />
         <Card
-          :card="game.deck[20]"
+          :card="{ suit: '♥', value: '2', order: 2, count: 2 }"
           class="absolute cursor-default"
           :flip="flipCutCard"
         />
