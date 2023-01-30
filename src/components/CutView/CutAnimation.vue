@@ -42,6 +42,9 @@ onMounted(() => {
   tl.to(revealer.value, { zIndex: 0 })
 })
 
+const getCardsToSpread = () =>
+  window.innerWidth <= 1024 ? game.deck.slice(13) : game.deck
+
 const cutCards = async (e) => {
   if (usersCard.value) return
 
@@ -108,7 +111,7 @@ watchEffect(() => {
     </div>
     <div ref="spread" class="relative flex -space-x-[6.25rem]">
       <div
-        v-for="card in game.deck"
+        v-for="card in getCardsToSpread()"
         :key="card"
         @click="cutCards"
         v-bind:data-card="JSON.stringify(card)"
