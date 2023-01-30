@@ -7,10 +7,12 @@ import { useGameStore } from './stores/game'
 import ScoreBoard from './components/ScoreBoard.vue'
 import Toast from './components/Toast.vue'
 import CountingView from './components/CountingView/CountingView.vue'
+import GameOver from './components/GameOver.vue'
 
 const { game } = useGameStore()
 </script>
 <template>
+  <GameOver v-if="game.winner" />
   <main :class="game.theme" class="h-screen overflow-hidden bg-gray-900">
     <StartView v-if="!game.stage" />
     <CutView v-if="game.stage == 'cut'" />

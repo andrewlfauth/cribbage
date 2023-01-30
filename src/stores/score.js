@@ -1,4 +1,4 @@
-import { reactive } from 'vue'
+import { reactive, watchEffect } from 'vue'
 import { defineStore } from 'pinia'
 import { useGameStore } from '../stores/game'
 import {
@@ -10,7 +10,7 @@ import {
 } from '../utils/scoring'
 
 export const useScoreStore = defineStore('score', () => {
-  const { game } = useGameStore()
+  const { game, changeStage } = useGameStore()
   let scoringTypes = ['fifteen', 'pair', 'run', 'flush', 'nobs']
 
   const initalState = {
@@ -44,6 +44,11 @@ export const useScoreStore = defineStore('score', () => {
   }
 
   const score = reactive({ ...initalState })
+
+  watchEffect(() => {
+    if (score.user >= 121 && score.user - score.bot >= 2) game.winner = 'user'
+    if (score.bot >= 121 && score.bot - score.user >= 2) game.winner = 'bot'
+  })
 
   const awardPoints = (points, player) => {
     if (!points.length) return
@@ -148,6 +153,8 @@ export const useScoreStore = defineStore('score', () => {
     Object.assign(score, { ...initalState, user, bot })
   }
 
+  const resetScoreStore = () => Object.assign(score, initalState)
+
   return {
     score,
     awardPoints,
@@ -155,5 +162,6 @@ export const useScoreStore = defineStore('score', () => {
     calculateCribScores,
     getCardElementsThatScored,
     resetHandScores,
+    resetScoreStore,
   }
 })

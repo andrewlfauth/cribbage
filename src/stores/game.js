@@ -3,14 +3,16 @@ import { SUITS, VALUES } from '../data/cards'
 import { defineStore } from 'pinia'
 
 export const useGameStore = defineStore('game', () => {
-  const game = reactive({
+  const initialState = {
     stage: '',
     dealer: '',
     deck: shuffle(newDeck()),
     usersHand: [],
     botsHand: [],
     crib: [],
-  })
+    winner: false,
+  }
+  const game = reactive({ ...initialState })
 
   const changeStage = (stage) => (game.stage = stage)
   const setDealer = (dealer) => (game.dealer = dealer)
@@ -28,12 +30,20 @@ export const useGameStore = defineStore('game', () => {
     changeStage('deal')
   }
 
+  const startNewGame = () => {
+    Object.assign(game, initialState)
+    game.botsHand = []
+    game.usersHand = []
+    game.stage = 'cut'
+  }
+
   return {
     game,
     changeStage,
     setDealer,
     addCardToHand,
     startNewHand,
+    startNewGame,
   }
 })
 
