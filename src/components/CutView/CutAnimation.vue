@@ -23,6 +23,8 @@ const container = ref(null)
 const spread = ref(null)
 const revealer = ref(null)
 
+const w = window.innerWidth
+
 onMounted(() => {
   let tl = gsap.timeline()
   let cardWidth = spread.value.children[0].offsetWidth
@@ -42,8 +44,7 @@ onMounted(() => {
   tl.to(revealer.value, { zIndex: 0 })
 })
 
-const getCardsToSpread = () =>
-  window.innerWidth <= 1024 ? game.deck.slice(13) : game.deck
+const getCardsToSpread = () => (w <= 1024 ? game.deck.slice(13) : game.deck)
 
 const cutCards = async (e) => {
   if (usersCard.value) return
@@ -53,7 +54,8 @@ const cutCards = async (e) => {
   let usersCardEl = e.target
   usersCard.value = JSON.parse(usersCardEl.dataset.card)
 
-  let botsCutIdx = Math.floor(Math.random() * 51)
+  let botsCutIdx =
+    w <= 1024 ? Math.floor(Math.random() * 39) : Math.floor(Math.random() * 51)
   while (game.deck[botsCutIdx].order == usersCard.value.order) {
     botsCutIdx = Math.floor(Math.random() * 51)
   }
