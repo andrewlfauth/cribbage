@@ -1,6 +1,7 @@
 <script setup>
 import Card from '../Card.vue'
 import { useGameStore } from '../../stores/game'
+import { useScoreStore } from '../../stores/score'
 import { gsap } from 'gsap'
 import Flip from 'gsap/Flip'
 import { ref } from 'vue'
@@ -17,6 +18,7 @@ gsap.registerPlugin(Flip)
 const emit = defineEmits(['end-stage'])
 
 const { game } = useGameStore()
+const { score } = useScoreStore()
 
 const selectedCards = ref([])
 const flipCards = ref(false)
@@ -27,6 +29,7 @@ const usersHandHome = ref(null)
 const botsHandHome = ref(null)
 const crib = ref(null)
 const cribHome = ref(null)
+const nibs = ref(null)
 
 const selectCard = (selection) => {
   let cardString = JSON.stringify(selection)
@@ -105,13 +108,23 @@ const throwCards = async () => {
   tl.call(endStage)
 }
 
+const cutDeck = async () => {
+  flipCutCard.value = true
+  let cutCard = game.deck[20]
+  if (cutCard.value == 'J') {
+    await wait(0.7)
+    score[game.dealer] += 2
+    gsap.to(nibs.value, { opacity: 1, y: -20, scale: 1 })
+  }
+}
+
 const endStage = async () => {
   const cribCards = [...crib.value.children].map((el) =>
     JSON.parse(el.dataset.card)
   )
   game.crib = cribCards
   await wait(1)
-  flipCutCard.value = true
+  await cutDeck()
   let usersHand = [...usersHandHome.value.children].map((el) =>
     JSON.parse(el.dataset.card)
   )
@@ -155,6 +168,17 @@ const endStage = async () => {
           :flip="flipCutCard"
           class="absolute"
         />
+        <span
+          ref="nibs"
+          class="absolute left-9 -top-8 text-4xl font-medium text-gray-400 before:content-['+'] before:text-lg before:mr-1 after:content-['pts'] after:text-xs after:self-end after:ml-1 after:mb-1 flex items-center opacity-0 scale-90"
+          :class="{
+            'text-red-400 t-current:text-green-400 t-domino:text-gray-100':
+              game.dealer == 'user',
+            'text-blue-400 t-current:text-purple-400 t-domino:text-black':
+              game.dealer == 'bot',
+          }"
+          >2</span
+        >
       </div>
 
       <div class="relative">
