@@ -130,7 +130,7 @@ export const useScoreStore = defineStore('score', () => {
       runs.reduce((acc, cards) => (acc += cards.length), 0)
 
     if (flush.length) total += flush[0].length
-    if (nobs.length) cribTotal++
+    if (nobs.length) total++
     score.cribTotal = total
   }
 

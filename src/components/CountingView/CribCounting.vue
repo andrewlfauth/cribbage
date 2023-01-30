@@ -212,7 +212,7 @@ const incrementPoints = (type, cards) => {
           :show-back="true"
         />
         <Card
-          :card="{ suit: '♥', value: '2', order: 2, count: 2 }"
+          :card="game.deck[20]"
           class="absolute cursor-default"
           :flip="flipCutCard"
         />
