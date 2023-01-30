@@ -17,7 +17,7 @@ const { changeStage } = useGameStore()
       <Button
         @click="changeStage('cut')"
         text="Start Game"
-        :class="'text-4xl ring-gray-200 mt-20'"
+        :class="'text-4xl ring-gray-200 mt-20 lg:mt-0'"
       />
     </div>
     <CardSettings class="hidden lg:block" />

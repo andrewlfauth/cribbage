@@ -19,13 +19,6 @@ const textColorClass = reactive({
   'text-blue-400 t-current:text-purple-400 t-domino:text-black':
     props.player == 'bot',
 })
-
-const buttonClass = reactive({
-  'border-red-400 t-current:border-green-400 t-domino:border-gray-100':
-    props.player == 'user',
-  'border-blue-400 t-current:border-purple-400 t-domino:border-black':
-    props.player == 'bot',
-})
 </script>
 
 <template>
@@ -50,8 +43,7 @@ const buttonClass = reactive({
     <Button
       text="Okay"
       @click="() => emit('clicked')"
-      class="mb-4 bg-gray-900 ring-offset-gray-800"
-      :class="buttonClass"
+      class="mb-4 bg-gray-900 ring-offset-gray-800 border-gray-700"
     />
     <div v-for="key in keys" class="mb-1 text-sm tracking-tight">
       <span

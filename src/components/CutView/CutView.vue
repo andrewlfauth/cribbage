@@ -45,7 +45,7 @@ const startDealStage = () => {
         'duration-300': animateOut,
         'duration-1000': !animateOut,
       }"
-      class="absolute left-0 right-0 mx-auto text-center top-1/3 lg:-translate-y-0 -translate-y-20 lg:top-16"
+      class="absolute left-0 right-0 mx-auto text-center top-1/3 lg:-translate-y-0 -translate-y-20 lg:top-28"
     >
       <p class="text-4xl text-gray-400">{{ resultMsg }}</p>
       <Button
