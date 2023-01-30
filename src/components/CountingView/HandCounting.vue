@@ -7,6 +7,7 @@ import Button from '../Button.vue'
 import HandTotal from './HandTotal.vue'
 import PointsPopup from './PointsPopup.vue'
 import { gsap } from 'gsap'
+import { wait } from '../../utils/helpers'
 
 const { game } = useGameStore()
 const { score, calculateHandScores, getCardElementsThatScored } =
@@ -25,10 +26,7 @@ let popupPoints = ref(0)
 const showHandTotal = ref(false)
 let countedFirstHand = ref(false)
 
-let playerCounting = computed(() => {
-  if (countedFirstHand.value) return game.dealer
-  else return game.dealer == 'user' ? 'bot' : 'user'
-})
+let playerCounting = ref(game.dealer == 'user' ? 'bot' : 'user')
 
 let currentScores = ref({
   fifteens: 0,
@@ -53,8 +51,13 @@ const countFirstHand = () => {
 
 const acceptCount = () => {
   showHandTotal.value = false
-  if (playerCounting.value == 'user') score.user += score.usersHandTotal
-  else score.bot += score.botsHandTotal
+  if (playerCounting.value == 'user') {
+    score.user += score.usersHandTotal
+    playerCounting.value = 'bot'
+  } else {
+    score.bot += score.botsHandTotal
+    playerCounting.value = 'user'
+  }
   if (!countedFirstHand.value) {
     countedFirstHand.value = true
     Object.keys(currentScores.value).forEach(
@@ -65,7 +68,17 @@ const acceptCount = () => {
   } else emit('done-counting')
 }
 
-const animateCount = (hand) => {
+const animateCount = async (hand) => {
+  if (
+    (playerCounting.value == 'user' && !score.usersHandTotal) ||
+    (playerCounting.value == 'bot' && !score.botsHandTotal)
+  ) {
+    await wait(0.5)
+    showHandTotal.value = true
+    return
+  }
+  console.log(playerCounting.value)
+  if (playerCounting.value == 'user') console.log(score.u)
   let els = getCardElementsThatScored(hand)
 
   scoringTypes.forEach((type) => {
