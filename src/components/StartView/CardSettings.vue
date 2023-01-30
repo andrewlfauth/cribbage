@@ -19,7 +19,7 @@ const getBackgroundImage = (url) => `background-image: url('${url}');`
           class="p-2 duration-150 rounded-md hover:bg-white hover:bg-opacity-10"
         >
           <div
-            class="w-[85px] h-[128px] rounded-md border-2 border-gray-200 bg-gray-200"
+            class="w-[65px] h-[100px] lg:w-[85px] lg:h-[128px] rounded-md border-2 border-gray-200 bg-gray-200"
           >
             <div
               :style="getBackgroundImage(cardBacks.default)"
@@ -36,7 +36,7 @@ const getBackgroundImage = (url) => `background-image: url('${url}');`
           class="p-2 duration-150 rounded-md hover:bg-white hover:bg-opacity-10"
         >
           <div
-            class="w-[85px] h-[128px] rounded-md border-2 border-gray-200 bg-gray-200"
+            class="w-[65px] h-[100px] lg:w-[85px] lg:h-[128px] rounded-md border-2 border-gray-200 bg-gray-200"
           >
             <div
               :style="getBackgroundImage(cardBacks.paint)"
@@ -53,7 +53,7 @@ const getBackgroundImage = (url) => `background-image: url('${url}');`
           class="p-2 duration-150 rounded-md hover:bg-white hover:bg-opacity-10"
         >
           <div
-            class="w-[85px] h-[128px] rounded-md border-2 border-gray-200 bg-gray-200"
+            class="w-[65px] h-[100px] lg:w-[85px] lg:h-[128px] rounded-md border-2 border-gray-200 bg-gray-200"
           >
             <div
               :style="getBackgroundImage(cardBacks.fish)"

@@ -176,7 +176,9 @@ const incrementPoints = (type, cards) => {
       <div
         ref="pointsPopup"
         class="flex items-center opacity-0 pointer-events-none"
-        :class="playerCounting == 'user' ? 'mt-44' : '-mt-44'"
+        :class="
+          playerCounting == 'user' ? 'mt-96 lg:mt-44' : 'lg:-mt-44 -mt-96'
+        "
       >
         <PointsPopup
           :scoringType="currentScoringType"
