@@ -11,8 +11,8 @@ export const usePeggingStore = defineStore('pegging', () => {
     active: [],
     spent: [],
     count: 0,
-    user: { hand: game.usersHand },
-    bot: { hand: game.botsHand },
+    user: { hand: [] },
+    bot: { hand: [] },
     opponent: '',
     go: { user: false, bot: false },
     turn: game.dealer == 'user' ? 'bot' : 'user',
@@ -222,5 +222,18 @@ export const usePeggingStore = defineStore('pegging', () => {
     game.dealer == 'user' ? (pegging.turn = 'bot') : (pegging.turn = 'user')
   }
 
-  return { pegging, playCard, getBotsCard, startTurn, setupPegging }
+  const clearPegging = () => {
+    Object.assign(pegging, initialState)
+    pegging.user.hand = []
+    pegging.bot.hand = []
+  }
+
+  return {
+    pegging,
+    playCard,
+    getBotsCard,
+    startTurn,
+    setupPegging,
+    clearPegging,
+  }
 })
