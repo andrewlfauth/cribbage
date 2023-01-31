@@ -40,7 +40,7 @@ export const usePeggingStore = defineStore('pegging', () => {
       : (pegging.waitForUserCard = true)
   }
 
-  const playCard = (card) => {
+  const playCard = async (card) => {
     let player = pegging.turn
 
     pegging.active.push(card)
@@ -66,6 +66,7 @@ export const usePeggingStore = defineStore('pegging', () => {
     }
     if (pegging.count == 31) {
       pegging.turnScore.push({ points: 2, message: '2 for 31' })
+      await wait(0.5)
       resetPegging()
       return switchTurns()
     }

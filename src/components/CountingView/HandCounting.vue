@@ -77,8 +77,6 @@ const animateCount = async (hand) => {
     showHandTotal.value = true
     return
   }
-  console.log(playerCounting.value)
-  if (playerCounting.value == 'user') console.log(score.u)
   let els = getCardElementsThatScored(hand)
 
   scoringTypes.forEach((type) => {
