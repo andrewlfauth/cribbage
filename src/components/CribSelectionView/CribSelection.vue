@@ -190,8 +190,10 @@ const endStage = async () => {
           class="absolute inset-0 mx-auto w-fit -top-10 text-xl font-medium"
           :class="{
             'opacity-0': animationStart,
-            'text-red-400': game.dealer == 'user',
-            'text-blue-400': game.dealer == 'bot',
+            'text-red-400 t-current:text-green-400 t-domino:text-gray-100':
+              game.dealer == 'user',
+            'text-blue-400 t-current:text-purple-400 t-domino:text-black':
+              game.dealer == 'bot',
           }"
           >{{ game.dealer == 'user' ? 'Your crib' : "Bot's crib" }}</span
         >
