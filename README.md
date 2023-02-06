@@ -1,6 +1,6 @@
 # Cribbage
 
-[Play cribbage](https://cribbage.vercel.aoo)
+View live site to [play cribbage](https://cribbage.vercel.aoo)
 
 ## Table of Contents
 
