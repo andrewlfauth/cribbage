@@ -48,7 +48,7 @@ const themeBack = `background-image: url('${theme.card}');`
 <template>
   <div
     v-bind:data-card="JSON.stringify(props.card)"
-    class="cursor-pointer card"
+    class="cursor-pointer select-none card"
     @click="$emit('clicked', props.card)"
   >
     <div
