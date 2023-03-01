@@ -14,7 +14,7 @@ View live site to [play cribbage](https://cribbage.vercel.aoo)
 
 This cribbage app is built using Vue 3 Composition API, Pinia for state management, and GSAP for fluid card animations. It's a modern, interactive, and user-friendly application for those who love playing cribbage.
 
-![cribbage app screenshot](https://res.cloudinary.com/dpnkrz8c8/image/upload/v1675712452/cribbage/ry2cclzvzan4gt9t4ccm.png)
+![cribbage app screenshot](https://res.cloudinary.com/dpnkrz8c8/image/upload/v1677697518/cribbage/qcctxmawxjra1rnsna0p.png)
 
 ### Built With
 
