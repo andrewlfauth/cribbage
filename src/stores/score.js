@@ -10,7 +10,7 @@ import {
 } from '../utils/scoring'
 
 export const useScoreStore = defineStore('score', () => {
-  const { game, changeStage } = useGameStore()
+  const { game } = useGameStore()
   let scoringTypes = ['fifteen', 'pair', 'run', 'flush', 'nobs']
 
   const initalState = {
@@ -45,9 +45,15 @@ export const useScoreStore = defineStore('score', () => {
 
   const score = reactive({ ...initalState })
 
+  const resetScoreStore = () => Object.assign(score, initalState)
+
   watchEffect(() => {
     if (score.user >= 121 && score.user - score.bot >= 2) game.winner = 'user'
     if (score.bot >= 121 && score.bot - score.user >= 2) game.winner = 'bot'
+  })
+
+  watchEffect(() => {
+    if (!game.stage) resetScoreStore()
   })
 
   const awardPoints = (points, player) => {
@@ -152,8 +158,6 @@ export const useScoreStore = defineStore('score', () => {
     let bot = score.bot
     Object.assign(score, { ...initalState, user, bot })
   }
-
-  const resetScoreStore = () => Object.assign(score, initalState)
 
   return {
     score,

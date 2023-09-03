@@ -8,6 +8,7 @@ import ScoreBoard from './components/ScoreBoard.vue'
 import Toast from './components/Toast.vue'
 import CountingView from './components/CountingView/CountingView.vue'
 import GameOver from './components/GameOver.vue'
+import EndGameButton from './components/EndGameButton.vue'
 
 const { game } = useGameStore()
 </script>
@@ -15,7 +16,7 @@ const { game } = useGameStore()
   <GameOver v-if="game.winner" />
   <main
     :class="game.theme"
-    class="h-screen overflow-hidden bg-gray-900 hidden md:block"
+    class="hidden h-screen overflow-hidden bg-gray-900 md:block"
   >
     <StartView v-if="!game.stage" />
     <CutView v-if="game.stage == 'cut'" />
@@ -23,10 +24,11 @@ const { game } = useGameStore()
     <PeggingView v-if="game.stage == 'pegging'" />
     <CountingView v-if="game.stage == 'count'" />
     <ScoreBoard />
+    <EndGameButton v-if="game.stage" />
     <Toast />
   </main>
   <div
-    class="md:hidden bg-gray-900 w-screen h-screen flex flex-col items-center justify-center text-gray-400 text-center"
+    class="flex flex-col items-center justify-center w-screen h-screen text-center text-gray-400 bg-gray-900 md:hidden"
   >
     <span class="text-3xl">Tablet or Desktop only :(</span>
     <a

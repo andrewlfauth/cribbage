@@ -37,6 +37,12 @@ export const useGameStore = defineStore('game', () => {
     game.stage = 'cut'
   }
 
+  const endGame = () => {
+    Object.assign(game, initialState)
+    game.botsHand = []
+    game.usersHand = []
+  }
+
   return {
     game,
     changeStage,
@@ -44,6 +50,7 @@ export const useGameStore = defineStore('game', () => {
     addCardToHand,
     startNewHand,
     startNewGame,
+    endGame,
   }
 })
 
