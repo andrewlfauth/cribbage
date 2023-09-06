@@ -23,7 +23,7 @@ const { game } = useGameStore()
     <CribSelectionView v-if="game.stage == 'deal'" />
     <PeggingView v-if="game.stage == 'pegging'" />
     <CountingView v-if="game.stage == 'count'" />
-    <ScoreBoard />
+    <ScoreBoard v-if="game.stage" />
     <EndGameButton v-if="game.stage" />
     <Toast />
   </main>
