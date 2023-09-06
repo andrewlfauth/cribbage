@@ -24,9 +24,7 @@ const { score } = useScoreStore()
       <div
         class="flex flex-col items-center font-semibold text-blue-500 t-current:text-purple-400 t-domino:text-black"
       >
-        <div
-          class="w-16 text-center border-2 border-gray-800 rounded t-domino:bg-gray-800"
-        >
+        <div class="w-16 text-center border-2 border-gray-800">
           <TextSlider :reactive-text="score.bot" :text-class="'text-3xl'" />
         </div>
         <span class="mt-1 text-sm tracking-tight text-gray-400">Bot</span>
