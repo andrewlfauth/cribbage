@@ -18,13 +18,13 @@ const { game } = useGameStore()
     :class="game.theme"
     class="hidden h-screen overflow-hidden bg-gray-900 md:block"
   >
-    <StartView v-if="!game.stage" />
+    <StartView v-if="game.stage == 'start'" />
     <CutView v-if="game.stage == 'cut'" />
     <CribSelectionView v-if="game.stage == 'deal'" />
     <PeggingView v-if="game.stage == 'pegging'" />
     <CountingView v-if="game.stage == 'count'" />
-    <ScoreBoard v-if="game.stage" />
-    <EndGameButton v-if="game.stage" />
+    <ScoreBoard v-if="game.stage != 'start'" />
+    <EndGameButton v-if="game.stage != 'start'" />
     <Toast />
   </main>
   <div

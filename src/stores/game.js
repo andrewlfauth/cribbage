@@ -4,7 +4,7 @@ import { defineStore } from 'pinia'
 
 export const useGameStore = defineStore('game', () => {
   const initialState = {
-    stage: '',
+    stage: 'start',
     dealer: '',
     deck: shuffle(newDeck()),
     usersHand: [],
