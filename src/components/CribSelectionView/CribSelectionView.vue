@@ -6,30 +6,20 @@ import { ref } from 'vue'
 
 const { game, changeStage } = useGameStore()
 
-let simulatedStage = ref('deal')
+let cardsDealt = ref(false)
 
 const handleCardsDealt = () => {
-  simulatedStage.value = 'crib-selection'
-  // change stage
+  cardsDealt.value = true
 }
 
 const handleCribSelected = (usersHand, botsHand) => {
-  simulatedStage.value = 'pegging'
   game.usersHand = usersHand
   game.botsHand = botsHand
-
   changeStage('pegging')
-  // chnage stage
 }
 </script>
 
 <template>
-  <DealAnimation
-    v-if="simulatedStage == 'deal'"
-    @cards-dealt="handleCardsDealt"
-  />
-  <CribSelection
-    v-if="simulatedStage == 'crib-selection'"
-    @end-stage="handleCribSelected"
-  />
+  <DealAnimation v-if="!cardsDealt" @done="handleCardsDealt" />
+  <CribSelection v-if="cardsDealt" @end-stage="handleCribSelected" />
 </template>

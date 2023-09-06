@@ -10,7 +10,7 @@ gsap.registerPlugin(Flip)
 
 const { game, addCardToHand } = useGameStore()
 
-const emit = defineEmits(['cards-dealt'])
+const emit = defineEmits(['done'])
 
 const deck = ref(null)
 const usersHandEl = ref(null)
@@ -50,7 +50,7 @@ onMounted(async () => {
     }
   }
   setTimeout(() => {
-    emit('cards-dealt')
+    emit('done')
   }, 1100)
 })
 
