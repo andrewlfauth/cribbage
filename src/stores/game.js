@@ -1,11 +1,11 @@
-import { reactive } from 'vue'
-import { SUITS, VALUES } from '../data/cards'
-import { defineStore } from 'pinia'
+import { reactive } from "vue"
+import { SUITS, VALUES } from "../data/cards"
+import { defineStore } from "pinia"
 
-export const useGameStore = defineStore('game', () => {
+export const useGameStore = defineStore("game", () => {
   const initialState = {
-    stage: 'start',
-    dealer: '',
+    stage: "start",
+    dealer: "",
     deck: shuffle(newDeck()),
     usersHand: [],
     botsHand: [],
@@ -17,24 +17,24 @@ export const useGameStore = defineStore('game', () => {
   const changeStage = (stage) => (game.stage = stage)
   const setDealer = (dealer) => (game.dealer = dealer)
   const addCardToHand = (card, player) => {
-    if (player == 'user') game.usersHand.push(card)
+    if (player == "user") game.usersHand.push(card)
     else game.botsHand.push(card)
   }
   const startNewHand = () => {
-    if (game.dealer == 'user') game.dealer = 'bot'
-    else game.dealer = 'user'
+    if (game.dealer == "user") game.dealer = "bot"
+    else game.dealer = "user"
     game.deck = shuffle(newDeck())
     game.usersHand = []
     game.botsHand = []
     game.crib = []
-    changeStage('deal')
+    changeStage("crib-selection")
   }
 
   const startNewGame = () => {
     Object.assign(game, initialState)
     game.botsHand = []
     game.usersHand = []
-    game.stage = 'cut'
+    game.stage = "cut"
   }
 
   const endGame = () => {

@@ -1,14 +1,14 @@
 <script setup>
-import CutView from './components/CutView/CutView.vue'
-import CribSelectionView from './components/CribSelectionView/CribSelectionView.vue'
-import StartView from './components/StartView/StartView.vue'
-import PeggingView from './components/PeggingView/PeggingView.vue'
-import { useGameStore } from './stores/game'
-import ScoreBoard from './components/ScoreBoard.vue'
-import Toast from './components/Toast.vue'
-import CountingView from './components/CountingView/CountingView.vue'
-import GameOver from './components/GameOver.vue'
-import EndGameButton from './components/EndGameButton.vue'
+import CutView from "./components/CutView/CutView.vue"
+import CribSelectionView from "./components/CribSelectionView/CribSelectionView.vue"
+import StartView from "./components/StartView/StartView.vue"
+import PeggingView from "./components/PeggingView/PeggingView.vue"
+import { useGameStore } from "./stores/game"
+import ScoreBoard from "./components/ScoreBoard.vue"
+import Toast from "./components/Toast.vue"
+import CountingView from "./components/CountingView/CountingView.vue"
+import GameOver from "./components/GameOver.vue"
+import EndGameButton from "./components/EndGameButton.vue"
 
 const { game } = useGameStore()
 </script>
@@ -20,7 +20,7 @@ const { game } = useGameStore()
   >
     <StartView v-if="game.stage == 'start'" />
     <CutView v-if="game.stage == 'cut'" />
-    <CribSelectionView v-if="game.stage == 'deal'" />
+    <CribSelectionView v-if="game.stage == 'crib-selection'" />
     <PeggingView v-if="game.stage == 'pegging'" />
     <CountingView v-if="game.stage == 'count'" />
     <ScoreBoard v-if="game.stage != 'start'" />

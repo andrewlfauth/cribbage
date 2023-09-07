@@ -1,28 +1,28 @@
 <script setup>
-import Button from '../Button.vue'
-import Card from '../Card.vue'
-import { ref } from 'vue'
-import { useGameStore } from '../../stores/game'
-import CutAnimation from './CutAnimation.vue'
+import Button from "../Button.vue"
+import Card from "../Card.vue"
+import { ref } from "vue"
+import { useGameStore } from "../../stores/game"
+import CutAnimation from "./CutAnimation.vue"
 
 const { setDealer, changeStage } = useGameStore()
 
 const showInstructions = ref(false)
-const resultMsg = ref('')
+const resultMsg = ref("")
 const animateOut = ref(false)
 const endStage = ref(false)
 
 const handleResults = (dealer) => {
-  dealer == 'user'
-    ? (resultMsg.value = 'You deal first!')
-    : (resultMsg.value = 'Bot deals first')
+  dealer == "user"
+    ? (resultMsg.value = "You deal first!")
+    : (resultMsg.value = "Bot deals first")
 
   setDealer(dealer)
 }
 
 const startDealStage = () => {
   endStage.value = true
-  changeStage('deal')
+  changeStage("crib-selection")
 }
 </script>
 
